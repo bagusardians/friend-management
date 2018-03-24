@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
 import com.spgroup.friendmanagement.entity.ConnectionResponseEntity;
+import com.spgroup.friendmanagement.exception.FriendServiceException;
 
 public class FriendManagementServiceImplTest {
 
@@ -33,5 +34,52 @@ public class FriendManagementServiceImplTest {
 		ConnectionResponseEntity actual = underTest.createFriendConnection(request);
 		assertEquals(expected.isSuccess(), actual.isSuccess());
 	}
+
+	@Test(expected= FriendServiceException.class)
+	public void testCreateFriendConnectionNullRequest() {
+		underTest.createFriendConnection(null);
+	}
+
+	@Test(expected= FriendServiceException.class)
+	public void testCreateFriendConnectionLessThanTwo() {
+		ConnectionRequestEntity request = new ConnectionRequestEntity();
+		List<String> friends = new ArrayList<>();
+		friends.add("bagus@yahoo.com");
+		request.setFriends(friends);
+		underTest.createFriendConnection(request);
+	}
+
+	@Test(expected= FriendServiceException.class)
+	public void testCreateFriendConnectionGreaterThanTwo() {
+		ConnectionRequestEntity request = new ConnectionRequestEntity();
+		List<String> friends = new ArrayList<>();
+		friends.add("bagus@yahoo.com");
+		friends.add("ardi@yahoo.com");
+		friends.add("syah@yahoo.com");
+		request.setFriends(friends);
+		underTest.createFriendConnection(request);
+	}
+
+	@Test(expected= FriendServiceException.class)
+	public void testCreateFriendConnectioInvalidEmail() {
+		ConnectionRequestEntity request = new ConnectionRequestEntity();
+		List<String> friends = new ArrayList<>();
+		friends.add("bagus@yahoo.com");
+		friends.add("sdfsdfsdf");
+		request.setFriends(friends);
+		underTest.createFriendConnection(request);
+	}
+
+	@Test(expected= FriendServiceException.class)
+	public void testCreateFriendConnectionSameEmail() {
+		ConnectionRequestEntity request = new ConnectionRequestEntity();
+		List<String> friends = new ArrayList<>();
+		friends.add("bagus@yahoo.com");
+		friends.add("bagus@yahoo.com");
+		request.setFriends(friends);
+		underTest.createFriendConnection(request);
+	}
+
+
 
 }
