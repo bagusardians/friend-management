@@ -1,7 +1,5 @@
 package com.spgroup.friendmanagement.dto;
 
-import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,27 +9,31 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="user")
+@Table(name = "user")
 public class UserDto {
 
 	@Id
-	@Column(name="id", nullable = false)
-	@GeneratedValue(generator = "system-uuid")
-	@GenericGenerator(name="system-uuid", strategy = "uuid")
-	private UUID id;
+	@Column(name = "id", nullable = false)
+	@GeneratedValue(generator = "UUID")
+	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	private String id;
 
-	@Column(name="email", nullable = false, unique = true)
+	@Column(name = "email", nullable = false, unique = true)
 	private String email;
-	
+
+	public UserDto() {
+
+	}
+
 	public UserDto(String email) {
 		this.email = email;
 	}
 
-	public UUID getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -42,7 +44,5 @@ public class UserDto {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	
-	
+
 }

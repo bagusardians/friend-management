@@ -13,6 +13,11 @@ public class FriendServiceException extends RuntimeException{
 		super();
 		this.errorMessage = errorMessage;
 	}
+
+	public FriendServiceException(String errorMessage, IndexOutOfBoundsException e) {
+		super(e);
+		this.errorMessage = errorMessage;
+	}
 	
 	public String getErrorMessage() {
 		return errorMessage;

@@ -15,29 +15,33 @@ public class UserRelationKey implements Serializable {
 	private static final long serialVersionUID = -1447691574693959344L;
 
 	@Column(name="id", nullable = false)
-	private UUID id;
+	private String id;
 
 	@Column(name="related_id", nullable = false)
-	private UUID relatedId;
+	private String relatedId;
 	
-	public UserRelationKey(UUID id, UUID relatedId) {
+	public UserRelationKey() {
+		
+	}
+	
+	public UserRelationKey(String id, String relatedId) {
 		this.id = id;
 		this.relatedId = relatedId;
 	}
 
-	public UUID getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public UUID getRelatedId() {
+	public String getRelatedId() {
 		return relatedId;
 	}
 
-	public void setRelatedId(UUID relatedId) {
+	public void setRelatedId(String relatedId) {
 		this.relatedId = relatedId;
 	}
 	

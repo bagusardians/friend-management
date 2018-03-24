@@ -12,12 +12,15 @@ public class UserRelationDto {
 	@EmbeddedId
 	private UserRelationKey key;
 
-	@Column(name="relation_type", nullable = false)
+	@Column(name = "relation_type", nullable = false)
 	private String relationType;
 
-	@Column(name="is_block")
+	@Column(name = "is_block")
 	private boolean block;
-	
+
+	public UserRelationDto() {
+
+	}
 
 	public UserRelationDto(UserRelationKey key, String relationType, boolean block) {
 		this.key = key;
@@ -48,6 +51,5 @@ public class UserRelationDto {
 	public void setBlock(boolean block) {
 		this.block = block;
 	}
-	
-	
+
 }
