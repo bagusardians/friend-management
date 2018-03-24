@@ -10,6 +10,9 @@ buildscript {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 	}
 }
+plugins {
+    id 'net.ltgt.apt' version '0.10'
+}
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
@@ -32,5 +35,7 @@ dependencies {
 	compile ('mysql:mysql-connector-java')
 	compile("io.springfox:springfox-swagger2:${swaggerVersion}")
 	compile("io.springfox:springfox-swagger-ui:${swaggerVersion}")
+	compileOnly ('org.projectlombok:lombok:1.16.20')
+	apt ("org.projectlombok:lombok:1.16.20")
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
