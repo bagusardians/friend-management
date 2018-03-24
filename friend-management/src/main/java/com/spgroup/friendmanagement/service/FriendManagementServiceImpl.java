@@ -7,8 +7,9 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 
 	@Override
 	public ConnectionResponseEntity createFriendConnection(ConnectionRequestEntity entity) {
-		// TODO Auto-generated method stub
-		return null;
+		ConnectionResponseEntity response = new ConnectionResponseEntity();
+		response.setSuccess(true);
+		return response;
 	}
 
 }

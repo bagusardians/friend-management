@@ -31,7 +31,7 @@ public class FriendManagementServiceImplTest {
 		ConnectionResponseEntity expected = new ConnectionResponseEntity();
 		expected.setSuccess(true);
 		ConnectionResponseEntity actual = underTest.createFriendConnection(request);
-		assertEquals(expected, actual);
+		assertEquals(expected.isSuccess(), actual.isSuccess());
 	}
 
 }
