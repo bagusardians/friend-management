@@ -19,6 +19,7 @@ import com.spgroup.friendmanagement.dao.UserRelationDao;
 import com.spgroup.friendmanagement.dto.UserDto;
 import com.spgroup.friendmanagement.entity.BasicResponseEntity;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
+import com.spgroup.friendmanagement.entity.FriendsRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsResponseEntity;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 
@@ -103,9 +104,11 @@ public class FriendManagementServiceImplTest {
 	@Test
 	public void testGetFriendListSuccess() {
 		String email = "test@example.com";
+		FriendsRequestEntity request = new FriendsRequestEntity();
+		request.setEmail(email);
 		FriendsResponseEntity expected = new FriendsResponseEntity();
 		expected.setSuccess(true);
-		FriendsResponseEntity actual = underTest.getFriendList(email);
+		FriendsResponseEntity actual = underTest.getFriendList(request);
 		assertEquals(expected.isSuccess(), actual.isSuccess());
 	}
 
