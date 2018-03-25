@@ -84,6 +84,9 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 
 	@Override
 	public FriendsResponseEntity getCommonFriendList(ConnectionRequestEntity request) {
+		RequestValidationUtil.validateConnectionRequest(request);
+		// get UserDto of the inputs and validate
+		// get the User relation for these user dto and find the commonality
 		return FriendsResponseEntity.createEmptyFriendList();
 	}
 

@@ -101,7 +101,7 @@ public class FriendManagementServiceImplTest {
 	}
 
 	@Test(expected = FriendServiceException.class)
-	public void testCreateFriendConnectioInvalidEmail() {
+	public void testCreateFriendConnectionInvalidEmail() {
 		ConnectionRequestEntity request = new ConnectionRequestEntity();
 		List<String> friends = new ArrayList<>();
 		friends.add(MOCK_EMAIL_1);
@@ -216,6 +216,59 @@ public class FriendManagementServiceImplTest {
 		expected.setSuccess(true);
 		FriendsResponseEntity actual = underTest.getCommonFriendList(request);
 		assertEquals(expected.isSuccess(), actual.isSuccess());
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testGetCommonFriendListNullRequest() {
+		underTest.createFriendConnection(null);
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testGetCommonFriendListEmptyEmails() {
+		ConnectionRequestEntity request = new ConnectionRequestEntity();
+		List<String> friends = new ArrayList<>();
+		request.setFriends(friends);
+		underTest.getCommonFriendList(request);
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testGetCommonFriendListLessThanTwo() {
+		ConnectionRequestEntity request = new ConnectionRequestEntity();
+		List<String> friends = new ArrayList<>();
+		friends.add(MOCK_EMAIL_1);
+		request.setFriends(friends);
+		underTest.getCommonFriendList(request);
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testGetCommonFriendListGreaterThanTwo() {
+		ConnectionRequestEntity request = new ConnectionRequestEntity();
+		List<String> friends = new ArrayList<>();
+		friends.add(MOCK_EMAIL_1);
+		friends.add(MOCK_EMAIL_2);
+		friends.add("syah@yahoo.com");
+		request.setFriends(friends);
+		underTest.getCommonFriendList(request);
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testGetCommonFriendListInvalidEmail() {
+		ConnectionRequestEntity request = new ConnectionRequestEntity();
+		List<String> friends = new ArrayList<>();
+		friends.add(MOCK_EMAIL_1);
+		friends.add("sdfsdfsdf");
+		request.setFriends(friends);
+		underTest.getCommonFriendList(request);
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testGetCommonFriendListSameEmail() {
+		ConnectionRequestEntity request = new ConnectionRequestEntity();
+		List<String> friends = new ArrayList<>();
+		friends.add(MOCK_EMAIL_1);
+		friends.add(MOCK_EMAIL_1);
+		request.setFriends(friends);
+		underTest.getCommonFriendList(request);
 	}
 
 }
