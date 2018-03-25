@@ -183,6 +183,11 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		if (Objects.isNull(user)) {
 			throw new FriendServiceException("Cannot find the specified sender", HttpStatus.UNPROCESSABLE_ENTITY);
 		}
+		List<String> relationList = UserUtil
+				.convertUserRelationListToRelatedIdList(userRelationDao.fetchUserRelationList(user.getId()));
+		if (CollectionUtils.isEmpty(relationList)) {
+			return RecipientsResponseEntity.createEmptyRecipientList();
+		}
 		RecipientsResponseEntity response = new RecipientsResponseEntity();
 		response.setSuccess(true);
 		return response;
