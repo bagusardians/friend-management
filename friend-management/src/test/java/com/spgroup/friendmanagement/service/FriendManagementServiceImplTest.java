@@ -182,6 +182,7 @@ public class FriendManagementServiceImplTest {
 		UserRelationKey key = new UserRelationKey(MOCK_UUID_1, MOCK_UUID_2);
 		relationList.add(new UserRelationDto(key, "FRIEND", false));
 		Mockito.doReturn(null).when(userDao).fetchUserByEmail(MOCK_EMAIL_1);
+		underTest.getFriendList(request);
 	}
 
 	@Test(expected = FriendServiceException.class)
