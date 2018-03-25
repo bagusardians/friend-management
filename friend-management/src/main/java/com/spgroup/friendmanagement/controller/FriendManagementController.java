@@ -34,7 +34,7 @@ public class FriendManagementController {
 
 	@RequestMapping(value = "/friends", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<FriendsResponseEntity> getFriendList(FriendsRequestEntity request) {
+	public ResponseEntity<FriendsResponseEntity> getFriendList(@RequestBody FriendsRequestEntity request) {
 		return ResponseEntity.ok(friendManagementService.getFriendList(request));
 	}
 }

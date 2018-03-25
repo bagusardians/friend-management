@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
+import com.spgroup.friendmanagement.entity.FriendsRequestEntity;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 
 public class RequestValidationUtil {
@@ -28,6 +29,16 @@ public class RequestValidationUtil {
 			throw new FriendServiceException("Friend List must contains different email",
 					HttpStatus.UNPROCESSABLE_ENTITY);
 		} else if (!EmailValidationUtil.isEmailsValid(friends.get(0), friends.get(1))) {
+			throw new FriendServiceException("Invalid email format", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+
+	public static void validateFriendsRequest(FriendsRequestEntity entity) {
+		if (Objects.isNull(entity)) {
+			throw new FriendServiceException("Request entity is null", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+		String email = entity.getEmail();
+		if (!EmailValidationUtil.isEmailsValid(email)) {
 			throw new FriendServiceException("Invalid email format", HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}

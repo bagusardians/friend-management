@@ -28,6 +28,11 @@ public class UserDto {
 
 	}
 
+	public UserDto(String id, String email) {
+		this.id = id;
+		this.email = email;
+	}
+
 	public UserDto(String email) {
 		this.email = email;
 	}

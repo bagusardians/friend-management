@@ -5,7 +5,10 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import lombok.Data;
+
 @Embeddable
+@Data
 public class UserRelationKey implements Serializable {
 
 	/**
@@ -25,22 +28,6 @@ public class UserRelationKey implements Serializable {
 
 	public UserRelationKey(String id, String relatedId) {
 		this.id = id;
-		this.relatedId = relatedId;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getRelatedId() {
-		return relatedId;
-	}
-
-	public void setRelatedId(String relatedId) {
 		this.relatedId = relatedId;
 	}
 

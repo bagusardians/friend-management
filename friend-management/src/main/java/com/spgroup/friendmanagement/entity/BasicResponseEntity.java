@@ -6,4 +6,11 @@ import lombok.Data;
 public class BasicResponseEntity {
 
 	boolean success;
+
+	public BasicResponseEntity() {
+	}
+
+	public BasicResponseEntity(boolean success) {
+		this.success = success;
+	}
 }
