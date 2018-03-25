@@ -1,5 +1,6 @@
 package com.spgroup.friendmanagement.dao;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,16 @@ public class UserDaoImpl implements UserDao {
 		} else {
 			return user;
 		}
+	}
+
+	@Override
+	public UserDto fetchUserByEmail(String email) {
+		return repo.findByEmail(email);
+	}
+
+	@Override
+	public List<UserDto> fetchUsersByIds(List<String> ids) {
+		return repo.findAllById(ids);
 	}
 
 }

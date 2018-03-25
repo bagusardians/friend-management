@@ -8,5 +8,5 @@ public interface UserRelationDao {
 
 	public UserRelationDto addUserRelation(UserRelationDto userRelation);
 
-	List<UserRelationDto> fetchUserRelationList(String email);
+	List<UserRelationDto> fetchUserRelationList(String id);
 }

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spgroup.friendmanagement.entity.BasicResponseEntity;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
+import com.spgroup.friendmanagement.entity.FriendsRequestEntity;
+import com.spgroup.friendmanagement.entity.FriendsResponseEntity;
 import com.spgroup.friendmanagement.service.FriendManagementService;
 
 @Controller
@@ -28,5 +30,11 @@ public class FriendManagementController {
 	@ResponseBody
 	public ResponseEntity<BasicResponseEntity> createFriendConnection(@RequestBody ConnectionRequestEntity entity) {
 		return ResponseEntity.ok(friendManagementService.createFriendConnection(entity));
+	}
+
+	@RequestMapping(value = "/friends", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<FriendsResponseEntity> getFriendList(@RequestBody FriendsRequestEntity request) {
+		return ResponseEntity.ok(friendManagementService.getFriendList(request));
 	}
 }
