@@ -187,8 +187,30 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		if (CollectionUtils.isEmpty(relationList)) {
 			return RecipientsResponseEntity.createEmptyRecipientList();
 		}
+
+		List<String> recipientIdList = new ArrayList<>();
+		for (UserRelationDto relation : relationList) {
+			if (!relation.isBlock()) {
+				recipientIdList.add(relation.getKey().getId());
+			}
+		}
+		if (CollectionUtils.isEmpty(recipientIdList)) {
+			return RecipientsResponseEntity.createEmptyRecipientList();
+		}
+
+		List<UserDto> userList = userDao.fetchUsersByIds(recipientIdList);
+		if (CollectionUtils.isEmpty(userList)) {
+			return RecipientsResponseEntity.createEmptyRecipientList();
+		}
+
+		List<String> emailList = new ArrayList<>();
+		for (UserDto userDto : userList) {
+			emailList.add(userDto.getEmail());
+		}
+
 		RecipientsResponseEntity response = new RecipientsResponseEntity();
 		response.setSuccess(true);
+		response.setRecipients(emailList);
 		return response;
 	}
 
