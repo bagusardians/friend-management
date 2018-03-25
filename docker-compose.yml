@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  database:
+    image: friend_database_image
+    container_name: friend_database_container
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: "friend_management"
+      MYSQL_USER: "fm_admin"
+      MYSQL_PASSWORD: "fm_admin_password"
+      MYSQL_ROOT_PASSWORD: ""
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --password=root --execute \"SHOW SCHEMAS;\""
+      interval: 3s
+      timeout: 1s
+      retries: 5
+  friend-management:
+    image: friend_webapp_image
+    links:
+      - database
+    container_name: friend_webapp
+    build:
+      context: ./friend-management
+      dockerfile: Dockerfile
+    volumes:
+      - ./friend-management/deploy:/friend-management/deploy
+    ports:
+      - 8090:8080
