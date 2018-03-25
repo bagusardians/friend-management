@@ -19,6 +19,7 @@ import com.spgroup.friendmanagement.dao.UserRelationDao;
 import com.spgroup.friendmanagement.dto.UserDto;
 import com.spgroup.friendmanagement.entity.BasicResponseEntity;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
+import com.spgroup.friendmanagement.entity.FriendsResponseEntity;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -97,6 +98,15 @@ public class FriendManagementServiceImplTest {
 		friends.add("bagus@yahoo.com");
 		request.setFriends(friends);
 		underTest.createFriendConnection(request);
+	}
+
+	@Test
+	public void testGetFriendListSuccess() {
+		String email = "test@example.com";
+		FriendsResponseEntity expected = new FriendsResponseEntity();
+		expected.setSuccess(true);
+		FriendsResponseEntity actual = underTest.getFriendList(email);
+		assertEquals(expected.isSuccess(), actual.isSuccess());
 	}
 
 }

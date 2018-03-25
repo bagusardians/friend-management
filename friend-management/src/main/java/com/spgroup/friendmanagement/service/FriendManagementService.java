@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.spgroup.friendmanagement.entity.BasicResponseEntity;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
+import com.spgroup.friendmanagement.entity.FriendsResponseEntity;
 
 @Service
 public interface FriendManagementService {
@@ -15,4 +16,12 @@ public interface FriendManagementService {
 	 * @return
 	 */
 	public BasicResponseEntity createFriendConnection(ConnectionRequestEntity entity);
+
+	/**
+	 * Get Friend List based on email
+	 * 
+	 * @param email
+	 * @return
+	 */
+	public FriendsResponseEntity getFriendList(String email);
 }

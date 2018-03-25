@@ -10,6 +10,7 @@ import com.spgroup.friendmanagement.dto.UserRelationDto;
 import com.spgroup.friendmanagement.dto.UserRelationKey;
 import com.spgroup.friendmanagement.entity.BasicResponseEntity;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
+import com.spgroup.friendmanagement.entity.FriendsResponseEntity;
 import com.spgroup.friendmanagement.util.RequestValidationUtil;
 import com.spgroup.friendmanagement.util.UserUtil;
 
@@ -35,6 +36,13 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		userRelationDao.addUserRelation(new UserRelationDto(relationSecondKey, "FRIEND", false));
 
 		BasicResponseEntity response = new BasicResponseEntity();
+		response.setSuccess(true);
+		return response;
+	}
+
+	@Override
+	public FriendsResponseEntity getFriendList(String email) {
+		FriendsResponseEntity response = new FriendsResponseEntity();
 		response.setSuccess(true);
 		return response;
 	}
