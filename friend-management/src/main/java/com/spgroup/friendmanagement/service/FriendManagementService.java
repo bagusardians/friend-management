@@ -6,7 +6,9 @@ import com.spgroup.friendmanagement.entity.BasicResponseEntity;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsResponseEntity;
+import com.spgroup.friendmanagement.entity.RecipientsResponseEntity;
 import com.spgroup.friendmanagement.entity.UnidirectionalRequestEntity;
+import com.spgroup.friendmanagement.entity.UpdateRequestEntity;
 
 @Service
 public interface FriendManagementService {
@@ -50,4 +52,12 @@ public interface FriendManagementService {
 	 * @return
 	 */
 	public BasicResponseEntity blockUpdates(UnidirectionalRequestEntity request);
+
+	/**
+	 * get list of recipients of an update from user
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public RecipientsResponseEntity getRecipientsOfUpdate(UpdateRequestEntity request);
 }

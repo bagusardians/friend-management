@@ -18,7 +18,9 @@ import com.spgroup.friendmanagement.entity.BasicResponseEntity;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsResponseEntity;
+import com.spgroup.friendmanagement.entity.RecipientsResponseEntity;
 import com.spgroup.friendmanagement.entity.UnidirectionalRequestEntity;
+import com.spgroup.friendmanagement.entity.UpdateRequestEntity;
 import com.spgroup.friendmanagement.enumeration.RelationTypeEnum;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 import com.spgroup.friendmanagement.util.RequestValidationUtil;
@@ -172,6 +174,13 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		userRelationDao.addUserRelation(userRelation);
 
 		return BasicResponseEntity.createSuccessResponse();
+	}
+
+	@Override
+	public RecipientsResponseEntity getRecipientsOfUpdate(UpdateRequestEntity request) {
+		RecipientsResponseEntity response = new RecipientsResponseEntity();
+		response.setSuccess(true);
+		return response;
 	}
 
 }

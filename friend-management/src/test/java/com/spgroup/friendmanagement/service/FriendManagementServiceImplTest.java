@@ -25,7 +25,9 @@ import com.spgroup.friendmanagement.entity.BasicResponseEntity;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsResponseEntity;
+import com.spgroup.friendmanagement.entity.RecipientsResponseEntity;
 import com.spgroup.friendmanagement.entity.UnidirectionalRequestEntity;
+import com.spgroup.friendmanagement.entity.UpdateRequestEntity;
 import com.spgroup.friendmanagement.enumeration.RelationTypeEnum;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 
@@ -535,6 +537,17 @@ public class FriendManagementServiceImplTest {
 		request.setRequestor("invalid");
 		request.setTarget("invalid2");
 		underTest.blockUpdates(request);
+	}
+
+	@Test
+	public void testGetRecipientsOfUpdate() {
+		UpdateRequestEntity request = new UpdateRequestEntity();
+		request.setSender(MOCK_EMAIL_1);
+
+		RecipientsResponseEntity expected = new RecipientsResponseEntity();
+		expected.setSuccess(true);
+		BasicResponseEntity actual = underTest.getRecipientsOfUpdate(request);
+		assertEquals(expected.isSuccess(), actual.isSuccess());
 	}
 
 }
