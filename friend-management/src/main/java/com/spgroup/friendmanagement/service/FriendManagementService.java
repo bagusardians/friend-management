@@ -25,4 +25,12 @@ public interface FriendManagementService {
 	 * @return
 	 */
 	public FriendsResponseEntity getFriendList(FriendsRequestEntity request);
+
+	/**
+	 * Retrieve the common friends list between two email addresses
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public FriendsResponseEntity getCommonFriendList(ConnectionRequestEntity request);
 }

@@ -3,11 +3,14 @@ package com.spgroup.friendmanagement.util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 
+import com.google.common.collect.Lists;
 import com.spgroup.friendmanagement.dto.UserDto;
+import com.spgroup.friendmanagement.dto.UserRelationDto;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 
@@ -47,6 +50,14 @@ public class UserUtil {
 			userDtoList.add(userDto);
 		}
 		return userDtoList;
+	}
+
+	public static List<String> convertUserRelationListToRelatedIdList(List<UserRelationDto> userRelationList) {
+		if (CollectionUtils.isEmpty(userRelationList)) {
+			return Lists.newArrayList();
+		}
+		return userRelationList.stream().map(user -> user.getKey().getRelatedId()).collect(Collectors.toList());
+
 	}
 
 }
