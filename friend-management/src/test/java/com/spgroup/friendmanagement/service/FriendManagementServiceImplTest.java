@@ -243,6 +243,106 @@ public class FriendManagementServiceImplTest {
 	}
 
 	@Test(expected = FriendServiceException.class)
+	public void testGetCommonFriendListInvalidFirst() {
+		ConnectionRequestEntity request = new ConnectionRequestEntity();
+		List<String> friends = new ArrayList<>();
+		friends.add(MOCK_EMAIL_1);
+		friends.add(MOCK_EMAIL_2);
+		request.setFriends(friends);
+		Mockito.doReturn(null).when(userDao).fetchUserByEmail(MOCK_EMAIL_1);
+		underTest.getCommonFriendList(request);
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testGetCommonFriendListInvalidSecond() {
+		ConnectionRequestEntity request = new ConnectionRequestEntity();
+		List<String> friends = new ArrayList<>();
+		friends.add(MOCK_EMAIL_1);
+		friends.add(MOCK_EMAIL_2);
+		request.setFriends(friends);
+		Mockito.doReturn(new UserDto(MOCK_UUID_1, MOCK_EMAIL_1)).when(userDao).fetchUserByEmail(MOCK_EMAIL_1);
+		Mockito.doReturn(null).when(userDao).fetchUserByEmail(MOCK_EMAIL_2);
+		underTest.getCommonFriendList(request);
+	}
+
+	@Test
+	public void testGetCommonFriendListEmptyRelation() {
+		ConnectionRequestEntity request = new ConnectionRequestEntity();
+		List<String> friends = new ArrayList<>();
+		friends.add(MOCK_EMAIL_1);
+		friends.add(MOCK_EMAIL_2);
+		request.setFriends(friends);
+		Mockito.doReturn(new UserDto(MOCK_UUID_1, MOCK_EMAIL_1)).when(userDao).fetchUserByEmail(MOCK_EMAIL_1);
+		Mockito.doReturn(new UserDto(MOCK_UUID_2, MOCK_EMAIL_2)).when(userDao).fetchUserByEmail(MOCK_EMAIL_2);
+		Mockito.doReturn(null).when(userRelationDao).fetchUserRelationList(MOCK_UUID_1);
+		List<UserRelationDto> relationList2 = new ArrayList<>();
+		UserRelationKey key2 = new UserRelationKey(MOCK_UUID_2, MOCK_UUID_3);
+		relationList2.add(new UserRelationDto(key2, "FRIEND", false));
+		Mockito.doReturn(relationList2).when(userRelationDao).fetchUserRelationList(MOCK_UUID_2);
+
+		FriendsResponseEntity expected = new FriendsResponseEntity();
+		expected.setSuccess(true);
+		expected.setFriends(new ArrayList<>());
+		expected.setCount(0);
+		FriendsResponseEntity actual = underTest.getCommonFriendList(request);
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void testGetCommonFriendListEmptyRelationSecond() {
+		ConnectionRequestEntity request = new ConnectionRequestEntity();
+		List<String> friends = new ArrayList<>();
+		friends.add(MOCK_EMAIL_1);
+		friends.add(MOCK_EMAIL_2);
+		request.setFriends(friends);
+		Mockito.doReturn(new UserDto(MOCK_UUID_1, MOCK_EMAIL_1)).when(userDao).fetchUserByEmail(MOCK_EMAIL_1);
+		Mockito.doReturn(new UserDto(MOCK_UUID_2, MOCK_EMAIL_2)).when(userDao).fetchUserByEmail(MOCK_EMAIL_2);
+		List<UserRelationDto> relationList1 = new ArrayList<>();
+		UserRelationKey key1 = new UserRelationKey(MOCK_UUID_1, MOCK_UUID_3);
+		relationList1.add(new UserRelationDto(key1, "FRIEND", false));
+		Mockito.doReturn(relationList1).when(userRelationDao).fetchUserRelationList(MOCK_UUID_1);
+		Mockito.doReturn(null).when(userRelationDao).fetchUserRelationList(MOCK_UUID_2);
+
+		FriendsResponseEntity expected = new FriendsResponseEntity();
+		expected.setSuccess(true);
+		expected.setFriends(new ArrayList<>());
+		expected.setCount(0);
+		FriendsResponseEntity actual = underTest.getCommonFriendList(request);
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void testGetCommonFriendListEmptyCommonFriends() {
+		ConnectionRequestEntity request = new ConnectionRequestEntity();
+		List<String> friends = new ArrayList<>();
+		friends.add(MOCK_EMAIL_1);
+		friends.add(MOCK_EMAIL_2);
+		request.setFriends(friends);
+		Mockito.doReturn(new UserDto(MOCK_UUID_1, MOCK_EMAIL_1)).when(userDao).fetchUserByEmail(MOCK_EMAIL_1);
+		Mockito.doReturn(new UserDto(MOCK_UUID_2, MOCK_EMAIL_2)).when(userDao).fetchUserByEmail(MOCK_EMAIL_2);
+		List<UserRelationDto> relationList = new ArrayList<>();
+		UserRelationKey key1 = new UserRelationKey(MOCK_UUID_1, MOCK_UUID_3);
+		relationList.add(new UserRelationDto(key1, "FRIEND", false));
+		Mockito.doReturn(relationList).when(userRelationDao).fetchUserRelationList(MOCK_UUID_1);
+		List<UserRelationDto> relationList2 = new ArrayList<>();
+		UserRelationKey key2 = new UserRelationKey(MOCK_UUID_2, MOCK_UUID_3);
+		relationList2.add(new UserRelationDto(key2, "FRIEND", false));
+		Mockito.doReturn(relationList2).when(userRelationDao).fetchUserRelationList(MOCK_UUID_2);
+
+		List<String> userIdList = new ArrayList<>();
+		userIdList.add(MOCK_UUID_3);
+		List<UserDto> userDtoList = new ArrayList<>();
+		Mockito.doReturn(userDtoList).when(userDao).fetchUsersByIds(userIdList);
+
+		FriendsResponseEntity expected = new FriendsResponseEntity();
+		expected.setSuccess(true);
+		expected.setFriends(new ArrayList<>());
+		expected.setCount(0);
+		FriendsResponseEntity actual = underTest.getCommonFriendList(request);
+		assertEquals(expected, actual);
+	}
+
+	@Test(expected = FriendServiceException.class)
 	public void testGetCommonFriendListNullRequest() {
 		underTest.createFriendConnection(null);
 	}
