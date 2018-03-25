@@ -25,6 +25,7 @@ import com.spgroup.friendmanagement.entity.BasicResponseEntity;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsResponseEntity;
+import com.spgroup.friendmanagement.entity.SubscribeRequestEntity;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -393,6 +394,17 @@ public class FriendManagementServiceImplTest {
 		friends.add(MOCK_EMAIL_1);
 		request.setFriends(friends);
 		underTest.getCommonFriendList(request);
+	}
+
+	@Test
+	public void testCreateSubscribeConnectionSuccess() {
+		SubscribeRequestEntity request = new SubscribeRequestEntity();
+		request.setRequestor(MOCK_EMAIL_1);
+		request.setTarget(MOCK_EMAIL_2);
+		BasicResponseEntity expected = new BasicResponseEntity();
+		expected.setSuccess(true);
+		BasicResponseEntity actual = underTest.createSubscribeConnection(request);
+		assertEquals(expected.isSuccess(), actual.isSuccess());
 	}
 
 }
