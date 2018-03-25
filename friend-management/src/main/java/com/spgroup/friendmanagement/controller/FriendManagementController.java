@@ -12,6 +12,7 @@ import com.spgroup.friendmanagement.entity.BasicResponseEntity;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsResponseEntity;
+import com.spgroup.friendmanagement.entity.SubscribeRequestEntity;
 import com.spgroup.friendmanagement.service.FriendManagementService;
 
 @Controller
@@ -26,10 +27,16 @@ public class FriendManagementController {
 		return true;
 	}
 
-	@RequestMapping(value = "/connect", method = RequestMethod.PUT)
+	@RequestMapping(value = "/connect/friend", method = RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<BasicResponseEntity> createFriendConnection(@RequestBody ConnectionRequestEntity entity) {
-		return ResponseEntity.ok(friendManagementService.createFriendConnection(entity));
+	public ResponseEntity<BasicResponseEntity> createFriendConnection(@RequestBody ConnectionRequestEntity request) {
+		return ResponseEntity.ok(friendManagementService.createFriendConnection(request));
+	}
+
+	@RequestMapping(value = "/connect/subscribe", method = RequestMethod.PUT)
+	@ResponseBody
+	public ResponseEntity<BasicResponseEntity> createSubscribeConnection(@RequestBody SubscribeRequestEntity request) {
+		return ResponseEntity.ok(friendManagementService.createSubscribeConnection(request));
 	}
 
 	@RequestMapping(value = "/friends", method = RequestMethod.POST)

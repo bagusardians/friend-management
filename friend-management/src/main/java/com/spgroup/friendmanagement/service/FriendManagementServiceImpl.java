@@ -18,6 +18,8 @@ import com.spgroup.friendmanagement.entity.BasicResponseEntity;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsResponseEntity;
+import com.spgroup.friendmanagement.entity.SubscribeRequestEntity;
+import com.spgroup.friendmanagement.enumeration.RelationTypeEnum;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 import com.spgroup.friendmanagement.util.RequestValidationUtil;
 import com.spgroup.friendmanagement.util.UserUtil;
@@ -39,13 +41,11 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		UserDto secondUser = userDao.addUser(new UserDto(UserUtil.getSecondEmail(entity)));
 
 		UserRelationKey relationFirstKey = new UserRelationKey(firstUser.getId(), secondUser.getId());
-		userRelationDao.addUserRelation(new UserRelationDto(relationFirstKey, "FRIEND", false));
+		userRelationDao.addUserRelation(new UserRelationDto(relationFirstKey, RelationTypeEnum.FRIEND, false));
 		UserRelationKey relationSecondKey = new UserRelationKey(secondUser.getId(), firstUser.getId());
-		userRelationDao.addUserRelation(new UserRelationDto(relationSecondKey, "FRIEND", false));
+		userRelationDao.addUserRelation(new UserRelationDto(relationSecondKey, RelationTypeEnum.FRIEND, false));
 
-		BasicResponseEntity response = new BasicResponseEntity();
-		response.setSuccess(true);
-		return response;
+		return BasicResponseEntity.createSuccessResponse();
 	}
 
 	@Override
@@ -129,6 +129,18 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 					"Cannot find the specified user with email: " + UserUtil.getSecondEmail(request),
 					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
+	}
+
+	@Override
+	public BasicResponseEntity createSubscribeConnection(SubscribeRequestEntity request) {
+		RequestValidationUtil.validateSubscribeRequest(request);
+
+		UserDto requestor = userDao.addUser(new UserDto(request.getRequestor()));
+		UserDto target = userDao.addUser(new UserDto(request.getTarget()));
+
+		UserRelationKey relationFirstKey = new UserRelationKey(requestor.getId(), target.getId());
+		userRelationDao.addUserRelation(new UserRelationDto(relationFirstKey, RelationTypeEnum.SUBSCRIBE, false));
+		return BasicResponseEntity.createSuccessResponse();
 	}
 
 }

@@ -13,4 +13,10 @@ public class BasicResponseEntity {
 	public BasicResponseEntity(boolean success) {
 		this.success = success;
 	}
+
+	public static BasicResponseEntity createSuccessResponse() {
+		BasicResponseEntity response = new BasicResponseEntity();
+		response.setSuccess(true);
+		return response;
+	}
 }
