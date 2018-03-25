@@ -13,6 +13,6 @@ public interface UserRelationRepository extends CrudRepository<UserRelationDto, 
 
 	public List<UserRelationDto> findByKeyId(String id);
 
-	public List<String> findRelatedIdByKeyId(String id);
+	public UserRelationDto findByKeyIdAndKeyRelatedId(String id, String relatedId);
 
 }
