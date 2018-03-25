@@ -401,6 +401,8 @@ public class FriendManagementServiceImplTest {
 		SubscribeRequestEntity request = new SubscribeRequestEntity();
 		request.setRequestor(MOCK_EMAIL_1);
 		request.setTarget(MOCK_EMAIL_2);
+		Mockito.doReturn(new UserDto(MOCK_EMAIL_1)).when(userDao).addUser(new UserDto(MOCK_EMAIL_1));
+		Mockito.doReturn(new UserDto(MOCK_EMAIL_2)).when(userDao).addUser(new UserDto(MOCK_EMAIL_2));
 		BasicResponseEntity expected = new BasicResponseEntity();
 		expected.setSuccess(true);
 		BasicResponseEntity actual = underTest.createSubscribeConnection(request);
