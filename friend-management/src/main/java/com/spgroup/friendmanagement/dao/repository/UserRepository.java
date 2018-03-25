@@ -16,4 +16,6 @@ public interface UserRepository extends CrudRepository<UserDto, String> {
 
 	List<UserDto> findAllById(Iterable<String> ids);
 
+	List<UserDto> findByEmailIn(Iterable<String> emails);
+
 }

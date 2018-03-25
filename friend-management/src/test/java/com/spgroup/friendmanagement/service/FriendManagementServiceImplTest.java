@@ -543,6 +543,7 @@ public class FriendManagementServiceImplTest {
 	public void testGetRecipientsOfUpdateSuccess() {
 		UpdateRequestEntity request = new UpdateRequestEntity();
 		request.setSender(MOCK_EMAIL_1);
+		request.setText("test " + MOCK_EMAIL_2);
 		Mockito.doReturn(new UserDto(MOCK_UUID_1, MOCK_EMAIL_1)).when(userDao).fetchUserByEmail(MOCK_EMAIL_1);
 		List<UserRelationDto> relationList = new ArrayList<>();
 		UserRelationKey key1 = new UserRelationKey(MOCK_UUID_3, MOCK_UUID_1);
@@ -555,6 +556,83 @@ public class FriendManagementServiceImplTest {
 		userDtoList.add(new UserDto(MOCK_UUID_3, MOCK_EMAIL_3));
 
 		Mockito.doReturn(userDtoList).when(userDao).fetchUsersByIds(userIdList);
+
+		List<String> userEmailList = new ArrayList<>();
+		userEmailList.add(MOCK_EMAIL_2);
+		List<UserDto> userDtoList2 = new ArrayList<>();
+		userDtoList2.add(new UserDto(MOCK_UUID_2, MOCK_EMAIL_2));
+
+		Mockito.doReturn(userDtoList2).when(userDao).fetchUserByEmail(userEmailList);
+
+		RecipientsResponseEntity expected = new RecipientsResponseEntity();
+		expected.setSuccess(true);
+		BasicResponseEntity actual = underTest.getRecipientsOfUpdate(request);
+		assertEquals(expected.isSuccess(), actual.isSuccess());
+	}
+
+	@Test
+	public void testGetRecipientsOfUpdateSuccessNoBlock() {
+		UpdateRequestEntity request = new UpdateRequestEntity();
+		request.setSender(MOCK_EMAIL_1);
+		request.setText("test " + MOCK_EMAIL_2);
+		Mockito.doReturn(new UserDto(MOCK_UUID_1, MOCK_EMAIL_1)).when(userDao).fetchUserByEmail(MOCK_EMAIL_1);
+		List<UserRelationDto> relationList = new ArrayList<>();
+		UserRelationKey key1 = new UserRelationKey(MOCK_UUID_3, MOCK_UUID_1);
+		relationList.add(new UserRelationDto(key1, RelationTypeEnum.FRIEND, false));
+		Mockito.doReturn(relationList).when(userRelationDao).fetchUserRelationListByRelatedId(MOCK_UUID_1);
+
+		List<String> userIdList = new ArrayList<>();
+		userIdList.add(MOCK_UUID_3);
+		List<UserDto> userDtoList = new ArrayList<>();
+		userDtoList.add(new UserDto(MOCK_UUID_3, MOCK_EMAIL_3));
+
+		Mockito.doReturn(userDtoList).when(userDao).fetchUsersByIds(userIdList);
+
+		List<String> userEmailList = new ArrayList<>();
+		userEmailList.add(MOCK_EMAIL_2);
+		List<UserDto> userDtoList2 = new ArrayList<>();
+		userDtoList2.add(new UserDto(MOCK_UUID_2, MOCK_EMAIL_2));
+
+		Mockito.doReturn(userDtoList2).when(userDao).fetchUserByEmail(userEmailList);
+
+		UserRelationKey key = new UserRelationKey(MOCK_UUID_2, MOCK_UUID_1);
+		UserRelationDto relation = new UserRelationDto(key, RelationTypeEnum.FRIEND, false);
+		Mockito.doReturn(relation).when(userRelationDao).fetchCorrelationBetweenTwoUser(MOCK_UUID_2, MOCK_UUID_1);
+
+		RecipientsResponseEntity expected = new RecipientsResponseEntity();
+		expected.setSuccess(true);
+		BasicResponseEntity actual = underTest.getRecipientsOfUpdate(request);
+		assertEquals(expected.isSuccess(), actual.isSuccess());
+	}
+
+	@Test
+	public void testGetRecipientsOfUpdateSuccessBlock() {
+		UpdateRequestEntity request = new UpdateRequestEntity();
+		request.setSender(MOCK_EMAIL_1);
+		request.setText("test " + MOCK_EMAIL_2);
+		Mockito.doReturn(new UserDto(MOCK_UUID_1, MOCK_EMAIL_1)).when(userDao).fetchUserByEmail(MOCK_EMAIL_1);
+		List<UserRelationDto> relationList = new ArrayList<>();
+		UserRelationKey key1 = new UserRelationKey(MOCK_UUID_3, MOCK_UUID_1);
+		relationList.add(new UserRelationDto(key1, RelationTypeEnum.FRIEND, false));
+		Mockito.doReturn(relationList).when(userRelationDao).fetchUserRelationListByRelatedId(MOCK_UUID_1);
+
+		List<String> userIdList = new ArrayList<>();
+		userIdList.add(MOCK_UUID_3);
+		List<UserDto> userDtoList = new ArrayList<>();
+		userDtoList.add(new UserDto(MOCK_UUID_3, MOCK_EMAIL_3));
+
+		Mockito.doReturn(userDtoList).when(userDao).fetchUsersByIds(userIdList);
+
+		List<String> userEmailList = new ArrayList<>();
+		userEmailList.add(MOCK_EMAIL_2);
+		List<UserDto> userDtoList2 = new ArrayList<>();
+		userDtoList2.add(new UserDto(MOCK_UUID_2, MOCK_EMAIL_2));
+
+		Mockito.doReturn(userDtoList2).when(userDao).fetchUserByEmail(userEmailList);
+
+		UserRelationKey key = new UserRelationKey(MOCK_UUID_2, MOCK_UUID_1);
+		UserRelationDto relation = new UserRelationDto(key, RelationTypeEnum.FRIEND, true);
+		Mockito.doReturn(relation).when(userRelationDao).fetchCorrelationBetweenTwoUser(MOCK_UUID_2, MOCK_UUID_1);
 
 		RecipientsResponseEntity expected = new RecipientsResponseEntity();
 		expected.setSuccess(true);
@@ -603,17 +681,12 @@ public class FriendManagementServiceImplTest {
 	public void testGetRecipientsOfUpdateNoUser() {
 		UpdateRequestEntity request = new UpdateRequestEntity();
 		request.setSender(MOCK_EMAIL_1);
+		request.setText("test " + MOCK_EMAIL_2);
 		Mockito.doReturn(new UserDto(MOCK_UUID_1, MOCK_EMAIL_1)).when(userDao).fetchUserByEmail(MOCK_EMAIL_1);
 		List<UserRelationDto> relationList = new ArrayList<>();
 		UserRelationKey key1 = new UserRelationKey(MOCK_UUID_3, MOCK_UUID_1);
 		relationList.add(new UserRelationDto(key1, RelationTypeEnum.FRIEND, false));
 		Mockito.doReturn(relationList).when(userRelationDao).fetchUserRelationListByRelatedId(MOCK_UUID_1);
-
-		List<String> userIdList = new ArrayList<>();
-		userIdList.add(MOCK_UUID_3);
-		List<UserDto> userDtoList = new ArrayList<>();
-		userDtoList.add(new UserDto(MOCK_UUID_3, MOCK_EMAIL_3));
-		Mockito.doReturn(null).when(userDao).fetchUsersByIds(userIdList);
 
 		RecipientsResponseEntity expected = new RecipientsResponseEntity();
 		expected.setSuccess(true);
