@@ -133,6 +133,12 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 	@Override
 	public BasicResponseEntity createSubscribeConnection(SubscribeRequestEntity request) {
 		RequestValidationUtil.validateSubscribeRequest(request);
+
+		UserDto requestor = userDao.addUser(new UserDto(request.getRequestor()));
+		UserDto target = userDao.addUser(new UserDto(request.getTarget()));
+
+		UserRelationKey relationFirstKey = new UserRelationKey(requestor.getId(), target.getId());
+		userRelationDao.addUserRelation(new UserRelationDto(relationFirstKey, "SUBSCRIBE", false));
 		return BasicResponseEntity.createSuccessResponse();
 	}
 
