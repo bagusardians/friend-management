@@ -540,9 +540,10 @@ public class FriendManagementServiceImplTest {
 	}
 
 	@Test
-	public void testGetRecipientsOfUpdate() {
+	public void testGetRecipientsOfUpdateSuccess() {
 		UpdateRequestEntity request = new UpdateRequestEntity();
 		request.setSender(MOCK_EMAIL_1);
+		Mockito.doReturn(new UserDto(MOCK_UUID_1, MOCK_EMAIL_1)).when(userDao).fetchUserByEmail(MOCK_EMAIL_1);
 
 		RecipientsResponseEntity expected = new RecipientsResponseEntity();
 		expected.setSuccess(true);
@@ -551,20 +552,25 @@ public class FriendManagementServiceImplTest {
 	}
 
 	@Test(expected = FriendServiceException.class)
+	public void testGetRecipientsOfUpdateInvalidSender() {
+		UpdateRequestEntity request = new UpdateRequestEntity();
+		request.setSender(MOCK_EMAIL_1);
+		Mockito.doReturn(null).when(userDao).fetchUserByEmail(MOCK_EMAIL_1);
+
+		underTest.getRecipientsOfUpdate(request);
+	}
+
+	@Test(expected = FriendServiceException.class)
 	public void testGetRecipientsOfUpdateInvalidEmail() {
 		String email = "invalid";
 		UpdateRequestEntity request = new UpdateRequestEntity();
 		request.setSender(email);
-		RecipientsResponseEntity expected = new RecipientsResponseEntity();
-		expected.setSuccess(true);
 		underTest.getRecipientsOfUpdate(request);
 	}
 
 	@Test(expected = FriendServiceException.class)
 	public void testGetRecipientsOfUpdateInvalidRequest() {
 		UpdateRequestEntity request = null;
-		RecipientsResponseEntity expected = new RecipientsResponseEntity();
-		expected.setSuccess(true);
 		underTest.getRecipientsOfUpdate(request);
 	}
 
