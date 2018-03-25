@@ -21,7 +21,7 @@ public class UserDaoImpl implements UserDao {
 		if (Objects.isNull(existingUser)) {
 			return repo.save(user);
 		} else {
-			return user;
+			return existingUser;
 		}
 	}
 

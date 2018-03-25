@@ -85,9 +85,50 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 	@Override
 	public FriendsResponseEntity getCommonFriendList(ConnectionRequestEntity request) {
 		RequestValidationUtil.validateConnectionRequest(request);
+
 		// get UserDto of the inputs and validate
+		UserDto firstUser = userDao.fetchUserByEmail(UserUtil.getFirstEmail(request));
+		UserDto secondUser = userDao.fetchUserByEmail(UserUtil.getSecondEmail(request));
+		validateRetrievedUsers(request, firstUser, secondUser);
+
 		// get the User relation for these user dto and find the commonality
-		return FriendsResponseEntity.createEmptyFriendList();
+		List<String> firstUserRelationList = UserUtil
+				.convertUserRelationListToRelatedIdList(userRelationDao.fetchUserRelationList(firstUser.getId()));
+		List<String> secondUserRelationList = UserUtil
+				.convertUserRelationListToRelatedIdList(userRelationDao.fetchUserRelationList(secondUser.getId()));
+		if (CollectionUtils.isEmpty(firstUserRelationList) || CollectionUtils.isEmpty(secondUserRelationList)) {
+			return FriendsResponseEntity.createEmptyFriendList();
+		}
+		firstUserRelationList.retainAll(secondUserRelationList);
+
+		List<UserDto> userList = userDao.fetchUsersByIds(firstUserRelationList);
+		if (CollectionUtils.isEmpty(userList)) {
+			return FriendsResponseEntity.createEmptyFriendList();
+		}
+
+		List<String> emailList = new ArrayList<>();
+		for (UserDto userDto : userList) {
+			emailList.add(userDto.getEmail());
+		}
+
+		FriendsResponseEntity response = new FriendsResponseEntity();
+		response.setSuccess(true);
+		response.setFriends(emailList);
+		response.setCount(emailList.size());
+		return response;
+	}
+
+	private void validateRetrievedUsers(ConnectionRequestEntity request, UserDto firstUser, UserDto secondUser) {
+		if (Objects.isNull(firstUser)) {
+			throw new FriendServiceException(
+					"Cannot find the specified user with email: " + UserUtil.getFirstEmail(request),
+					HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+		if (Objects.isNull(secondUser)) {
+			throw new FriendServiceException(
+					"Cannot find the specified user with email: " + UserUtil.getSecondEmail(request),
+					HttpStatus.UNPROCESSABLE_ENTITY);
+		}
 	}
 
 }
