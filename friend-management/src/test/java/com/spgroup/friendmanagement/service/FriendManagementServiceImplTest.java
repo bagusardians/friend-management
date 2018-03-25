@@ -440,7 +440,7 @@ public class FriendManagementServiceImplTest {
 	}
 
 	@Test(expected = FriendServiceException.class)
-	public void testCreateSubscribeConnection() {
+	public void testCreateSubscribeConnectionInvalidEmail() {
 		UnidirectionalRequestEntity request = new UnidirectionalRequestEntity();
 		request.setRequestor("invalid");
 		request.setTarget("invalid2");
@@ -448,14 +448,93 @@ public class FriendManagementServiceImplTest {
 	}
 
 	@Test
-	public void testBlockUserSuccess() {
+	public void testBlockUpdatesSuccess() {
 		UnidirectionalRequestEntity request = new UnidirectionalRequestEntity();
 		request.setRequestor(MOCK_EMAIL_1);
 		request.setTarget(MOCK_EMAIL_2);
+		Mockito.doReturn(new UserDto(MOCK_UUID_1, MOCK_EMAIL_1)).when(userDao).fetchUserByEmail(MOCK_EMAIL_1);
+		Mockito.doReturn(new UserDto(MOCK_UUID_2, MOCK_EMAIL_2)).when(userDao).fetchUserByEmail(MOCK_EMAIL_2);
+
+		UserRelationKey key = new UserRelationKey(MOCK_UUID_1, MOCK_UUID_2);
+		UserRelationDto relation = new UserRelationDto(key, RelationTypeEnum.FRIEND, false);
+		Mockito.doReturn(relation).when(userRelationDao).fetchCorrelationBetweenTwoUser(MOCK_UUID_1, MOCK_UUID_2);
+
 		BasicResponseEntity expected = new BasicResponseEntity();
 		expected.setSuccess(true);
-		BasicResponseEntity actual = underTest.blockUser(request);
+		BasicResponseEntity actual = underTest.blockUpdates(request);
 		assertEquals(expected.isSuccess(), actual.isSuccess());
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testBlockUpdatesNoRelation() {
+		UnidirectionalRequestEntity request = new UnidirectionalRequestEntity();
+		request.setRequestor(MOCK_EMAIL_1);
+		request.setTarget(MOCK_EMAIL_2);
+		Mockito.doReturn(new UserDto(MOCK_UUID_1, MOCK_EMAIL_1)).when(userDao).fetchUserByEmail(MOCK_EMAIL_1);
+		Mockito.doReturn(new UserDto(MOCK_UUID_2, MOCK_EMAIL_2)).when(userDao).fetchUserByEmail(MOCK_EMAIL_2);
+
+		Mockito.doReturn(null).when(userRelationDao).fetchCorrelationBetweenTwoUser(MOCK_UUID_1, MOCK_UUID_2);
+
+		underTest.blockUpdates(request);
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testBlockUpdatesInvalidRequestor() {
+		UnidirectionalRequestEntity request = new UnidirectionalRequestEntity();
+		request.setRequestor(MOCK_EMAIL_1);
+		request.setTarget(MOCK_EMAIL_2);
+		Mockito.doReturn(null).when(userDao).fetchUserByEmail(MOCK_EMAIL_1);
+		Mockito.doReturn(new UserDto(MOCK_UUID_2, MOCK_EMAIL_2)).when(userDao).fetchUserByEmail(MOCK_EMAIL_2);
+
+		underTest.blockUpdates(request);
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testBlockUpdatesInvalidTarget() {
+		UnidirectionalRequestEntity request = new UnidirectionalRequestEntity();
+		request.setRequestor(MOCK_EMAIL_1);
+		request.setTarget(MOCK_EMAIL_2);
+		Mockito.doReturn(new UserDto(MOCK_UUID_1, MOCK_EMAIL_1)).when(userDao).fetchUserByEmail(MOCK_EMAIL_1);
+		Mockito.doReturn(null).when(userDao).fetchUserByEmail(MOCK_EMAIL_2);
+
+		underTest.blockUpdates(request);
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testBlockUserNull() {
+		underTest.blockUpdates(null);
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testBlockUpdatesEmptyRequestor() {
+		UnidirectionalRequestEntity request = new UnidirectionalRequestEntity();
+		request.setRequestor("");
+		request.setTarget(MOCK_EMAIL_2);
+		underTest.blockUpdates(request);
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testBlockUpdatesEmptyTarget() {
+		UnidirectionalRequestEntity request = new UnidirectionalRequestEntity();
+		request.setRequestor(MOCK_EMAIL_1);
+		request.setTarget("");
+		underTest.blockUpdates(request);
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testBlockUpdatesItself() {
+		UnidirectionalRequestEntity request = new UnidirectionalRequestEntity();
+		request.setRequestor(MOCK_EMAIL_1);
+		request.setTarget(MOCK_EMAIL_1);
+		underTest.blockUpdates(request);
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testBlockUpdatesInvalidEmail() {
+		UnidirectionalRequestEntity request = new UnidirectionalRequestEntity();
+		request.setRequestor("invalid");
+		request.setTarget("invalid2");
+		underTest.blockUpdates(request);
 	}
 
 }
