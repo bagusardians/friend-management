@@ -8,8 +8,11 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "user")
+@Data
 public class UserDto {
 
 	@Id
@@ -28,21 +31,4 @@ public class UserDto {
 	public UserDto(String email) {
 		this.email = email;
 	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
 }

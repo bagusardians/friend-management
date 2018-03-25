@@ -7,6 +7,11 @@ import com.spgroup.friendmanagement.dto.UserDto;
 @Service
 public interface UserDao {
 
+	/**
+	 * 
+	 * @param user
+	 * @return
+	 */
 	public UserDto addUser(UserDto user);
-	
+
 }

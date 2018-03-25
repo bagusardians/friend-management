@@ -1,6 +1,6 @@
 package com.spgroup.friendmanagement.entity;
 
-public class ConnectionResponseEntity {
+public class BasicResponseEntity {
 
 	boolean success;
 

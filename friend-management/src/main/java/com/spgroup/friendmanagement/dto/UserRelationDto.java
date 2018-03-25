@@ -5,8 +5,11 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "user_relation")
+@Data
 public class UserRelationDto {
 
 	@EmbeddedId
@@ -25,30 +28,6 @@ public class UserRelationDto {
 	public UserRelationDto(UserRelationKey key, String relationType, boolean block) {
 		this.key = key;
 		this.relationType = relationType;
-		this.block = block;
-	}
-
-	public UserRelationKey getKey() {
-		return key;
-	}
-
-	public void setKey(UserRelationKey key) {
-		this.key = key;
-	}
-
-	public String getRelationType() {
-		return relationType;
-	}
-
-	public void setRelationType(String relationType) {
-		this.relationType = relationType;
-	}
-
-	public boolean isBlock() {
-		return block;
-	}
-
-	public void setBlock(boolean block) {
 		this.block = block;
 	}
 

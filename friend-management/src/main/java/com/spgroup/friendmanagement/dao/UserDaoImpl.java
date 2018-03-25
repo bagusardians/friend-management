@@ -1,5 +1,7 @@
 package com.spgroup.friendmanagement.dao;
 
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +13,15 @@ public class UserDaoImpl implements UserDao {
 
 	@Autowired
 	UserRepository repo;
-	
+
 	@Override
 	public UserDto addUser(UserDto user) {
-		return repo.save(user);
+		UserDto existingUser = repo.findByEmail(user.getEmail());
+		if (Objects.isNull(existingUser)) {
+			return repo.save(user);
+		} else {
+			return user;
+		}
 	}
 
 }

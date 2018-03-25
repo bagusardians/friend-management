@@ -8,8 +8,8 @@ import com.spgroup.friendmanagement.dao.UserRelationDao;
 import com.spgroup.friendmanagement.dto.UserDto;
 import com.spgroup.friendmanagement.dto.UserRelationDto;
 import com.spgroup.friendmanagement.dto.UserRelationKey;
+import com.spgroup.friendmanagement.entity.BasicResponseEntity;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
-import com.spgroup.friendmanagement.entity.ConnectionResponseEntity;
 import com.spgroup.friendmanagement.util.RequestValidationUtil;
 import com.spgroup.friendmanagement.util.UserUtil;
 
@@ -23,7 +23,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 	UserRelationDao userRelationDao;
 
 	@Override
-	public ConnectionResponseEntity createFriendConnection(ConnectionRequestEntity entity) {
+	public BasicResponseEntity createFriendConnection(ConnectionRequestEntity entity) {
 		RequestValidationUtil.validateConnectionRequest(entity);
 
 		UserDto firstUser = userDao.addUser(new UserDto(UserUtil.getFirstEmail(entity)));
@@ -34,7 +34,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		UserRelationKey relationSecondKey = new UserRelationKey(secondUser.getId(), firstUser.getId());
 		userRelationDao.addUserRelation(new UserRelationDto(relationSecondKey, "FRIEND", false));
 
-		ConnectionResponseEntity response = new ConnectionResponseEntity();
+		BasicResponseEntity response = new BasicResponseEntity();
 		response.setSuccess(true);
 		return response;
 	}
