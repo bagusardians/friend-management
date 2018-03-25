@@ -10,6 +10,10 @@ buildscript {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 	}
 }
+plugins {
+    id 'io.franzbecker.gradle-lombok' version '1.8'
+    id 'java'
+}
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
@@ -23,12 +27,17 @@ sourceCompatibility = 1.8
 repositories {
 	mavenCentral()
 }
+lombok {
+	version = '1.16.4'
+	sha256 = ""
+}
 
 dependencies {
 	compile('org.springframework:spring-web')
 	compile("org.springframework.boot:spring-boot-starter-web")
 	compile('org.springframework.boot:spring-boot-starter-data-rest')
 	compile("org.springframework.boot:spring-boot-starter-data-jpa")
+	compile('org.projectlombok:lombok:1.16.4')
 	compile ('mysql:mysql-connector-java')
 	compile("io.springfox:springfox-swagger2:${swaggerVersion}")
 	compile("io.springfox:springfox-swagger-ui:${swaggerVersion}")
