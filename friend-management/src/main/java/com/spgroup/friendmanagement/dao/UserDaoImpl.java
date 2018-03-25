@@ -35,4 +35,9 @@ public class UserDaoImpl implements UserDao {
 		return repo.findAllById(ids);
 	}
 
+	@Override
+	public List<UserDto> fetchUserByEmail(List<String> emails) {
+		return repo.findByEmailIn(emails);
+	}
+
 }

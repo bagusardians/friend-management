@@ -33,4 +33,12 @@ public interface UserDao {
 	 */
 	List<UserDto> fetchUsersByIds(List<String> ids);
 
+	/**
+	 * fetch user list by list of email
+	 * 
+	 * @param emails
+	 * @return
+	 */
+	List<UserDto> fetchUserByEmail(List<String> emails);
+
 }

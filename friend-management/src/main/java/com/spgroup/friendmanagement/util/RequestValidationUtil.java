@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsRequestEntity;
 import com.spgroup.friendmanagement.entity.UnidirectionalRequestEntity;
+import com.spgroup.friendmanagement.entity.UpdateRequestEntity;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 
 public class RequestValidationUtil {
@@ -30,7 +31,7 @@ public class RequestValidationUtil {
 		} else if (friends.get(0).equals(friends.get(1))) {
 			throw new FriendServiceException("Friend List must contains different email",
 					HttpStatus.UNPROCESSABLE_ENTITY);
-		} else if (!EmailValidationUtil.isEmailsValid(friends.get(0), friends.get(1))) {
+		} else if (!EmailUtil.isEmailsValid(friends.get(0), friends.get(1))) {
 			throw new FriendServiceException("Invalid email format", HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
@@ -40,7 +41,7 @@ public class RequestValidationUtil {
 			throw new FriendServiceException("Request entity is null", HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 		String email = entity.getEmail();
-		if (!EmailValidationUtil.isEmailsValid(email)) {
+		if (!EmailUtil.isEmailsValid(email)) {
 			throw new FriendServiceException("Invalid email format", HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
@@ -55,7 +56,17 @@ public class RequestValidationUtil {
 			throw new FriendServiceException("Subscribe target email is empty", HttpStatus.UNPROCESSABLE_ENTITY);
 		} else if (entity.getRequestor().equals(entity.getTarget())) {
 			throw new FriendServiceException("Requestor cannor subscribe itself", HttpStatus.UNPROCESSABLE_ENTITY);
-		} else if (!EmailValidationUtil.isEmailsValid(entity.getRequestor(), entity.getTarget())) {
+		} else if (!EmailUtil.isEmailsValid(entity.getRequestor(), entity.getTarget())) {
+			throw new FriendServiceException("Invalid email format", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+
+	public static void validateUpdateRequest(UpdateRequestEntity entity) {
+		if (Objects.isNull(entity)) {
+			throw new FriendServiceException("Request entity is null", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+		String email = entity.getSender();
+		if (!EmailUtil.isEmailsValid(email)) {
 			throw new FriendServiceException("Invalid email format", HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}

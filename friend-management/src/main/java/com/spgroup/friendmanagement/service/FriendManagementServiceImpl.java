@@ -18,9 +18,12 @@ import com.spgroup.friendmanagement.entity.BasicResponseEntity;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsResponseEntity;
+import com.spgroup.friendmanagement.entity.RecipientsResponseEntity;
 import com.spgroup.friendmanagement.entity.UnidirectionalRequestEntity;
+import com.spgroup.friendmanagement.entity.UpdateRequestEntity;
 import com.spgroup.friendmanagement.enumeration.RelationTypeEnum;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
+import com.spgroup.friendmanagement.util.EmailUtil;
 import com.spgroup.friendmanagement.util.RequestValidationUtil;
 import com.spgroup.friendmanagement.util.UserUtil;
 
@@ -172,6 +175,64 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		userRelationDao.addUserRelation(userRelation);
 
 		return BasicResponseEntity.createSuccessResponse();
+	}
+
+	@Override
+	public RecipientsResponseEntity getRecipientsOfUpdate(UpdateRequestEntity request) {
+		RequestValidationUtil.validateUpdateRequest(request);
+		UserDto user = userDao.fetchUserByEmail(request.getSender());
+		if (Objects.isNull(user)) {
+			throw new FriendServiceException("Cannot find the specified sender", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+		List<UserRelationDto> relationList = userRelationDao.fetchUserRelationListByRelatedId(user.getId());
+		if (CollectionUtils.isEmpty(relationList)) {
+			return RecipientsResponseEntity.createEmptyRecipientList();
+		}
+
+		List<String> recipientIdList = new ArrayList<>();
+		for (UserRelationDto relation : relationList) {
+			if (!relation.isBlock()) {
+				recipientIdList.add(relation.getKey().getId());
+			}
+		}
+		if (CollectionUtils.isEmpty(recipientIdList)) {
+			return RecipientsResponseEntity.createEmptyRecipientList();
+		}
+
+		List<UserDto> userListFromText = getRecipientsFromText(request, user);
+
+		List<UserDto> userList = userDao.fetchUsersByIds(recipientIdList);
+		userList.removeAll(userListFromText);
+		userList.addAll(userListFromText);
+		if (CollectionUtils.isEmpty(userList)) {
+			return RecipientsResponseEntity.createEmptyRecipientList();
+		}
+
+		List<String> emailList = new ArrayList<>();
+		for (UserDto userDto : userList) {
+			emailList.add(userDto.getEmail());
+		}
+
+		RecipientsResponseEntity response = new RecipientsResponseEntity();
+		response.setSuccess(true);
+		response.setRecipients(emailList);
+		return response;
+	}
+
+	private List<UserDto> getRecipientsFromText(UpdateRequestEntity request, UserDto user) {
+		List<String> emailListFromText = EmailUtil.extractEmailFromText(request.getText());
+		List<UserDto> recipientFromText = new ArrayList<>();
+		if (CollectionUtils.isEmpty(emailListFromText)) {
+			return recipientFromText;
+		}
+		List<UserDto> userListFromText = userDao.fetchUserByEmail(emailListFromText);
+		for (UserDto userDto : userListFromText) {
+			UserRelationDto relation = userRelationDao.fetchCorrelationBetweenTwoUser(userDto.getId(), user.getId());
+			if (Objects.isNull(relation) || !relation.isBlock()) {
+				recipientFromText.add(userDto);
+			}
+		}
+		return recipientFromText;
 	}
 
 }

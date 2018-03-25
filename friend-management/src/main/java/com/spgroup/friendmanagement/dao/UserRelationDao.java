@@ -11,4 +11,6 @@ public interface UserRelationDao {
 	List<UserRelationDto> fetchUserRelationList(String id);
 
 	UserRelationDto fetchCorrelationBetweenTwoUser(String id, String relatedId);
+
+	List<UserRelationDto> fetchUserRelationListByRelatedId(String relatedId);
 }

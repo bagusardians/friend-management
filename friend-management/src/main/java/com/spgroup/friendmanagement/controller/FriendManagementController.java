@@ -12,7 +12,9 @@ import com.spgroup.friendmanagement.entity.BasicResponseEntity;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsResponseEntity;
+import com.spgroup.friendmanagement.entity.RecipientsResponseEntity;
 import com.spgroup.friendmanagement.entity.UnidirectionalRequestEntity;
+import com.spgroup.friendmanagement.entity.UpdateRequestEntity;
 import com.spgroup.friendmanagement.service.FriendManagementService;
 
 @Controller
@@ -27,20 +29,20 @@ public class FriendManagementController {
 		return true;
 	}
 
-	@RequestMapping(value = "/connect/friend", method = RequestMethod.PUT)
+	@RequestMapping(value = "/connect/friend", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<BasicResponseEntity> createFriendConnection(@RequestBody ConnectionRequestEntity request) {
 		return ResponseEntity.ok(friendManagementService.createFriendConnection(request));
 	}
 
-	@RequestMapping(value = "/connect/subscribe", method = RequestMethod.PUT)
+	@RequestMapping(value = "/connect/subscribe", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<BasicResponseEntity> createSubscribeConnection(
 			@RequestBody UnidirectionalRequestEntity request) {
 		return ResponseEntity.ok(friendManagementService.createSubscribeConnection(request));
 	}
 
-	@RequestMapping(value = "/connect/block", method = RequestMethod.PUT)
+	@RequestMapping(value = "/connect/block", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<BasicResponseEntity> blockUpdates(@RequestBody UnidirectionalRequestEntity request) {
 		return ResponseEntity.ok(friendManagementService.blockUpdates(request));
@@ -56,5 +58,11 @@ public class FriendManagementController {
 	@ResponseBody
 	public ResponseEntity<FriendsResponseEntity> getCommonFriendList(@RequestBody ConnectionRequestEntity request) {
 		return ResponseEntity.ok(friendManagementService.getCommonFriendList(request));
+	}
+
+	@RequestMapping(value = "/recipients/update", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<RecipientsResponseEntity> getRecipientsOfUpdate(@RequestBody UpdateRequestEntity request) {
+		return ResponseEntity.ok(friendManagementService.getRecipientsOfUpdate(request));
 	}
 }
