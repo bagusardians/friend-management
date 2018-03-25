@@ -44,10 +44,10 @@ public interface FriendManagementService {
 	public BasicResponseEntity createSubscribeConnection(UnidirectionalRequestEntity request);
 
 	/**
-	 * block target user from requestor user
+	 * block target user udpates from requestor user
 	 * 
 	 * @param request
 	 * @return
 	 */
-	public BasicResponseEntity blockUser(UnidirectionalRequestEntity request);
+	public BasicResponseEntity blockUpdates(UnidirectionalRequestEntity request);
 }

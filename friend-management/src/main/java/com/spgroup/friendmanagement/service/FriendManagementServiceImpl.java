@@ -131,6 +131,17 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		}
 	}
 
+	private void validateRetrievedUsers(UnidirectionalRequestEntity request, UserDto requestor, UserDto target) {
+		if (Objects.isNull(requestor)) {
+			throw new FriendServiceException("Cannot find the specified user with email: " + request.getRequestor(),
+					HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+		if (Objects.isNull(target)) {
+			throw new FriendServiceException("Cannot find the specified user with email: " + request.getTarget(),
+					HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+
 	@Override
 	public BasicResponseEntity createSubscribeConnection(UnidirectionalRequestEntity request) {
 		RequestValidationUtil.validateSubscribeRequest(request);
@@ -144,7 +155,22 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 	}
 
 	@Override
-	public BasicResponseEntity blockUser(UnidirectionalRequestEntity request) {
+	public BasicResponseEntity blockUpdates(UnidirectionalRequestEntity request) {
+		RequestValidationUtil.validateSubscribeRequest(request);
+
+		UserDto requestor = userDao.fetchUserByEmail(request.getRequestor());
+		UserDto target = userDao.fetchUserByEmail(request.getTarget());
+		validateRetrievedUsers(request, requestor, target);
+
+		UserRelationDto userRelation = userRelationDao.fetchCorrelationBetweenTwoUser(requestor.getId(),
+				target.getId());
+		if (Objects.isNull(userRelation)) {
+			throw new FriendServiceException("No connection from requestor to target", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+
+		userRelation.setBlock(true);
+		userRelationDao.addUserRelation(userRelation);
+
 		return BasicResponseEntity.createSuccessResponse();
 	}
 

@@ -35,14 +35,15 @@ public class FriendManagementController {
 
 	@RequestMapping(value = "/connect/subscribe", method = RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<BasicResponseEntity> createSubscribeConnection(@RequestBody UnidirectionalRequestEntity request) {
+	public ResponseEntity<BasicResponseEntity> createSubscribeConnection(
+			@RequestBody UnidirectionalRequestEntity request) {
 		return ResponseEntity.ok(friendManagementService.createSubscribeConnection(request));
 	}
 
 	@RequestMapping(value = "/connect/block", method = RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<BasicResponseEntity> blockUser(@RequestBody UnidirectionalRequestEntity request) {
-		return ResponseEntity.ok(friendManagementService.blockUser(request));
+	public ResponseEntity<BasicResponseEntity> blockUpdates(@RequestBody UnidirectionalRequestEntity request) {
+		return ResponseEntity.ok(friendManagementService.blockUpdates(request));
 	}
 
 	@RequestMapping(value = "/friends", method = RequestMethod.POST)
