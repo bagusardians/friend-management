@@ -407,4 +407,41 @@ public class FriendManagementServiceImplTest {
 		assertEquals(expected.isSuccess(), actual.isSuccess());
 	}
 
+	@Test(expected = FriendServiceException.class)
+	public void testCreateSubscribeConnectionNull() {
+		underTest.createSubscribeConnection(null);
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testCreateSubscribeConnectionEmptyRequestor() {
+		SubscribeRequestEntity request = new SubscribeRequestEntity();
+		request.setRequestor("");
+		request.setTarget(MOCK_EMAIL_2);
+		underTest.createSubscribeConnection(request);
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testCreateSubscribeConnectionEmptyTarget() {
+		SubscribeRequestEntity request = new SubscribeRequestEntity();
+		request.setRequestor(MOCK_EMAIL_1);
+		request.setTarget("");
+		underTest.createSubscribeConnection(request);
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testCreateSubscribeConnectionItself() {
+		SubscribeRequestEntity request = new SubscribeRequestEntity();
+		request.setRequestor(MOCK_EMAIL_1);
+		request.setTarget(MOCK_EMAIL_1);
+		underTest.createSubscribeConnection(request);
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testCreateSubscribeConnection() {
+		SubscribeRequestEntity request = new SubscribeRequestEntity();
+		request.setRequestor("invalid");
+		request.setTarget("invalid2");
+		underTest.createSubscribeConnection(request);
+	}
+
 }
