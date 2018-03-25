@@ -27,20 +27,20 @@ public class FriendManagementController {
 		return true;
 	}
 
-	@RequestMapping(value = "/connect/friend", method = RequestMethod.PUT)
+	@RequestMapping(value = "/connect/friend", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<BasicResponseEntity> createFriendConnection(@RequestBody ConnectionRequestEntity request) {
 		return ResponseEntity.ok(friendManagementService.createFriendConnection(request));
 	}
 
-	@RequestMapping(value = "/connect/subscribe", method = RequestMethod.PUT)
+	@RequestMapping(value = "/connect/subscribe", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<BasicResponseEntity> createSubscribeConnection(
 			@RequestBody UnidirectionalRequestEntity request) {
 		return ResponseEntity.ok(friendManagementService.createSubscribeConnection(request));
 	}
 
-	@RequestMapping(value = "/connect/block", method = RequestMethod.PUT)
+	@RequestMapping(value = "/connect/block", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<BasicResponseEntity> blockUpdates(@RequestBody UnidirectionalRequestEntity request) {
 		return ResponseEntity.ok(friendManagementService.blockUpdates(request));
