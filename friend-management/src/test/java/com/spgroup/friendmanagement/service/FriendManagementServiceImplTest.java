@@ -25,7 +25,7 @@ import com.spgroup.friendmanagement.entity.BasicResponseEntity;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsResponseEntity;
-import com.spgroup.friendmanagement.entity.SubscribeRequestEntity;
+import com.spgroup.friendmanagement.entity.UnidirectionalRequestEntity;
 import com.spgroup.friendmanagement.enumeration.RelationTypeEnum;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 
@@ -399,7 +399,7 @@ public class FriendManagementServiceImplTest {
 
 	@Test
 	public void testCreateSubscribeConnectionSuccess() {
-		SubscribeRequestEntity request = new SubscribeRequestEntity();
+		UnidirectionalRequestEntity request = new UnidirectionalRequestEntity();
 		request.setRequestor(MOCK_EMAIL_1);
 		request.setTarget(MOCK_EMAIL_2);
 		Mockito.doReturn(new UserDto(MOCK_EMAIL_1)).when(userDao).addUser(new UserDto(MOCK_EMAIL_1));
@@ -417,7 +417,7 @@ public class FriendManagementServiceImplTest {
 
 	@Test(expected = FriendServiceException.class)
 	public void testCreateSubscribeConnectionEmptyRequestor() {
-		SubscribeRequestEntity request = new SubscribeRequestEntity();
+		UnidirectionalRequestEntity request = new UnidirectionalRequestEntity();
 		request.setRequestor("");
 		request.setTarget(MOCK_EMAIL_2);
 		underTest.createSubscribeConnection(request);
@@ -425,7 +425,7 @@ public class FriendManagementServiceImplTest {
 
 	@Test(expected = FriendServiceException.class)
 	public void testCreateSubscribeConnectionEmptyTarget() {
-		SubscribeRequestEntity request = new SubscribeRequestEntity();
+		UnidirectionalRequestEntity request = new UnidirectionalRequestEntity();
 		request.setRequestor(MOCK_EMAIL_1);
 		request.setTarget("");
 		underTest.createSubscribeConnection(request);
@@ -433,7 +433,7 @@ public class FriendManagementServiceImplTest {
 
 	@Test(expected = FriendServiceException.class)
 	public void testCreateSubscribeConnectionItself() {
-		SubscribeRequestEntity request = new SubscribeRequestEntity();
+		UnidirectionalRequestEntity request = new UnidirectionalRequestEntity();
 		request.setRequestor(MOCK_EMAIL_1);
 		request.setTarget(MOCK_EMAIL_1);
 		underTest.createSubscribeConnection(request);
@@ -441,7 +441,7 @@ public class FriendManagementServiceImplTest {
 
 	@Test(expected = FriendServiceException.class)
 	public void testCreateSubscribeConnection() {
-		SubscribeRequestEntity request = new SubscribeRequestEntity();
+		UnidirectionalRequestEntity request = new UnidirectionalRequestEntity();
 		request.setRequestor("invalid");
 		request.setTarget("invalid2");
 		underTest.createSubscribeConnection(request);

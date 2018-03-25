@@ -18,7 +18,7 @@ import com.spgroup.friendmanagement.entity.BasicResponseEntity;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsResponseEntity;
-import com.spgroup.friendmanagement.entity.SubscribeRequestEntity;
+import com.spgroup.friendmanagement.entity.UnidirectionalRequestEntity;
 import com.spgroup.friendmanagement.enumeration.RelationTypeEnum;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 import com.spgroup.friendmanagement.util.RequestValidationUtil;
@@ -132,7 +132,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 	}
 
 	@Override
-	public BasicResponseEntity createSubscribeConnection(SubscribeRequestEntity request) {
+	public BasicResponseEntity createSubscribeConnection(UnidirectionalRequestEntity request) {
 		RequestValidationUtil.validateSubscribeRequest(request);
 
 		UserDto requestor = userDao.addUser(new UserDto(request.getRequestor()));

@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils;
 
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsRequestEntity;
-import com.spgroup.friendmanagement.entity.SubscribeRequestEntity;
+import com.spgroup.friendmanagement.entity.UnidirectionalRequestEntity;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 
 public class RequestValidationUtil {
@@ -45,7 +45,7 @@ public class RequestValidationUtil {
 		}
 	}
 
-	public static void validateSubscribeRequest(SubscribeRequestEntity entity) {
+	public static void validateSubscribeRequest(UnidirectionalRequestEntity entity) {
 		if (Objects.isNull(entity)) {
 			throw new FriendServiceException("Request entity is null", HttpStatus.UNPROCESSABLE_ENTITY);
 		}

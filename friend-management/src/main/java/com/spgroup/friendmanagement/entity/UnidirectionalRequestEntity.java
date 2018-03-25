@@ -3,7 +3,7 @@ package com.spgroup.friendmanagement.entity;
 import lombok.Data;
 
 @Data
-public class SubscribeRequestEntity {
+public class UnidirectionalRequestEntity {
 
 	private String requestor;
 
