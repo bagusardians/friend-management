@@ -32,7 +32,7 @@ public class FriendManagementController {
 		return ResponseEntity.ok(friendManagementService.createFriendConnection(entity));
 	}
 
-	@RequestMapping(value = "/friends", method = RequestMethod.GET)
+	@RequestMapping(value = "/friends", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<FriendsResponseEntity> getFriendList(FriendsRequestEntity request) {
 		return ResponseEntity.ok(friendManagementService.getFriendList(request));
