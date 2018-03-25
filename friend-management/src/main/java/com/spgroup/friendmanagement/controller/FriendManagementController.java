@@ -37,4 +37,10 @@ public class FriendManagementController {
 	public ResponseEntity<FriendsResponseEntity> getFriendList(@RequestBody FriendsRequestEntity request) {
 		return ResponseEntity.ok(friendManagementService.getFriendList(request));
 	}
+
+	@RequestMapping(value = "/friends/common", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<FriendsResponseEntity> getCommonFriendList(@RequestBody ConnectionRequestEntity request) {
+		return ResponseEntity.ok(friendManagementService.getCommonFriendList(request));
+	}
 }
