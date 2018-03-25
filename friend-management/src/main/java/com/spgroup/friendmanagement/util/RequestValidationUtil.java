@@ -5,9 +5,11 @@ import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsRequestEntity;
+import com.spgroup.friendmanagement.entity.SubscribeRequestEntity;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 
 public class RequestValidationUtil {
@@ -39,6 +41,21 @@ public class RequestValidationUtil {
 		}
 		String email = entity.getEmail();
 		if (!EmailValidationUtil.isEmailsValid(email)) {
+			throw new FriendServiceException("Invalid email format", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+
+	public static void validateSubscribeRequest(SubscribeRequestEntity entity) {
+		if (Objects.isNull(entity)) {
+			throw new FriendServiceException("Request entity is null", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+		if (StringUtils.isEmpty(entity.getRequestor())) {
+			throw new FriendServiceException("Subscribe requestor email is empty", HttpStatus.UNPROCESSABLE_ENTITY);
+		} else if (StringUtils.isEmpty(entity.getTarget())) {
+			throw new FriendServiceException("Subscribe target email is empty", HttpStatus.UNPROCESSABLE_ENTITY);
+		} else if (entity.getRequestor().equals(entity.getTarget())) {
+			throw new FriendServiceException("Requestor cannor subscribe itself", HttpStatus.UNPROCESSABLE_ENTITY);
+		} else if (!EmailValidationUtil.isEmailsValid(entity.getRequestor(), entity.getTarget())) {
 			throw new FriendServiceException("Invalid email format", HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}

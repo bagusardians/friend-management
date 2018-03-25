@@ -132,7 +132,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 
 	@Override
 	public BasicResponseEntity createSubscribeConnection(SubscribeRequestEntity request) {
-
+		RequestValidationUtil.validateSubscribeRequest(request);
 		return BasicResponseEntity.createSuccessResponse();
 	}
 
