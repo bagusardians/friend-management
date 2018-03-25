@@ -18,7 +18,7 @@ import com.spgroup.friendmanagement.entity.BasicResponseEntity;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsResponseEntity;
-import com.spgroup.friendmanagement.entity.SubscribeRequestEntity;
+import com.spgroup.friendmanagement.entity.UnidirectionalRequestEntity;
 import com.spgroup.friendmanagement.enumeration.RelationTypeEnum;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 import com.spgroup.friendmanagement.util.RequestValidationUtil;
@@ -131,8 +131,19 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		}
 	}
 
+	private void validateRetrievedUsers(UnidirectionalRequestEntity request, UserDto requestor, UserDto target) {
+		if (Objects.isNull(requestor)) {
+			throw new FriendServiceException("Cannot find the specified user with email: " + request.getRequestor(),
+					HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+		if (Objects.isNull(target)) {
+			throw new FriendServiceException("Cannot find the specified user with email: " + request.getTarget(),
+					HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+
 	@Override
-	public BasicResponseEntity createSubscribeConnection(SubscribeRequestEntity request) {
+	public BasicResponseEntity createSubscribeConnection(UnidirectionalRequestEntity request) {
 		RequestValidationUtil.validateSubscribeRequest(request);
 
 		UserDto requestor = userDao.addUser(new UserDto(request.getRequestor()));
@@ -140,6 +151,26 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 
 		UserRelationKey relationFirstKey = new UserRelationKey(requestor.getId(), target.getId());
 		userRelationDao.addUserRelation(new UserRelationDto(relationFirstKey, RelationTypeEnum.SUBSCRIBE, false));
+		return BasicResponseEntity.createSuccessResponse();
+	}
+
+	@Override
+	public BasicResponseEntity blockUpdates(UnidirectionalRequestEntity request) {
+		RequestValidationUtil.validateSubscribeRequest(request);
+
+		UserDto requestor = userDao.fetchUserByEmail(request.getRequestor());
+		UserDto target = userDao.fetchUserByEmail(request.getTarget());
+		validateRetrievedUsers(request, requestor, target);
+
+		UserRelationDto userRelation = userRelationDao.fetchCorrelationBetweenTwoUser(requestor.getId(),
+				target.getId());
+		if (Objects.isNull(userRelation)) {
+			throw new FriendServiceException("No connection from requestor to target", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+
+		userRelation.setBlock(true);
+		userRelationDao.addUserRelation(userRelation);
+
 		return BasicResponseEntity.createSuccessResponse();
 	}
 

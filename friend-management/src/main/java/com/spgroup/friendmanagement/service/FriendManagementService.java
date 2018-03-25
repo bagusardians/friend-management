@@ -6,7 +6,7 @@ import com.spgroup.friendmanagement.entity.BasicResponseEntity;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsResponseEntity;
-import com.spgroup.friendmanagement.entity.SubscribeRequestEntity;
+import com.spgroup.friendmanagement.entity.UnidirectionalRequestEntity;
 
 @Service
 public interface FriendManagementService {
@@ -41,5 +41,13 @@ public interface FriendManagementService {
 	 * @param entity
 	 * @return
 	 */
-	public BasicResponseEntity createSubscribeConnection(SubscribeRequestEntity request);
+	public BasicResponseEntity createSubscribeConnection(UnidirectionalRequestEntity request);
+
+	/**
+	 * block target user udpates from requestor user
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public BasicResponseEntity blockUpdates(UnidirectionalRequestEntity request);
 }

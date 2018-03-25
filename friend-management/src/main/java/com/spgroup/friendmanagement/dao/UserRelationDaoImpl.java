@@ -24,4 +24,9 @@ public class UserRelationDaoImpl implements UserRelationDao {
 		return repo.findByKeyId(id);
 	}
 
+	@Override
+	public UserRelationDto fetchCorrelationBetweenTwoUser(String id, String relatedId) {
+		return repo.findByKeyIdAndKeyRelatedId(id, relatedId);
+	}
+
 }
