@@ -143,4 +143,9 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		return BasicResponseEntity.createSuccessResponse();
 	}
 
+	@Override
+	public BasicResponseEntity blockUser(UnidirectionalRequestEntity request) {
+		return BasicResponseEntity.createSuccessResponse();
+	}
+
 }

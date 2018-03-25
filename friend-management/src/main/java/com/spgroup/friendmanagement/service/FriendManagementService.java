@@ -42,4 +42,12 @@ public interface FriendManagementService {
 	 * @return
 	 */
 	public BasicResponseEntity createSubscribeConnection(UnidirectionalRequestEntity request);
+
+	/**
+	 * block target user from requestor user
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public BasicResponseEntity blockUser(UnidirectionalRequestEntity request);
 }

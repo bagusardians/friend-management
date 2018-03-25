@@ -447,4 +447,15 @@ public class FriendManagementServiceImplTest {
 		underTest.createSubscribeConnection(request);
 	}
 
+	@Test
+	public void testBlockUserSuccess() {
+		UnidirectionalRequestEntity request = new UnidirectionalRequestEntity();
+		request.setRequestor(MOCK_EMAIL_1);
+		request.setTarget(MOCK_EMAIL_2);
+		BasicResponseEntity expected = new BasicResponseEntity();
+		expected.setSuccess(true);
+		BasicResponseEntity actual = underTest.blockUser(request);
+		assertEquals(expected.isSuccess(), actual.isSuccess());
+	}
+
 }
