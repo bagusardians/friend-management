@@ -27,6 +27,9 @@ import com.spgroup.friendmanagement.util.EmailUtil;
 import com.spgroup.friendmanagement.util.RequestValidationUtil;
 import com.spgroup.friendmanagement.util.UserUtil;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class FriendManagementServiceImpl implements FriendManagementService {
 
@@ -38,6 +41,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 
 	@Override
 	public BasicResponseEntity createFriendConnection(ConnectionRequestEntity entity) {
+		log.info("Create a friend connection");
 		RequestValidationUtil.validateConnectionRequest(entity);
 
 		UserDto firstUser = userDao.addUser(new UserDto(UserUtil.getFirstEmail(entity)));
@@ -48,11 +52,13 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		UserRelationKey relationSecondKey = new UserRelationKey(secondUser.getId(), firstUser.getId());
 		userRelationDao.addUserRelation(new UserRelationDto(relationSecondKey, RelationTypeEnum.FRIEND, false));
 
+		log.info("successfully create a friend connection");
 		return BasicResponseEntity.createSuccessResponse();
 	}
 
 	@Override
 	public FriendsResponseEntity getFriendList(FriendsRequestEntity request) {
+		log.info("Retrieving friend list");
 		RequestValidationUtil.validateFriendsRequest(request);
 		UserDto user = userDao.fetchUserByEmail(request.getEmail());
 		if (Objects.isNull(user)) {
@@ -61,6 +67,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 
 		List<UserRelationDto> userRelationList = userRelationDao.fetchUserRelationList(user.getId());
 		if (CollectionUtils.isEmpty(userRelationList)) {
+			log.info("No friend list");
 			return FriendsResponseEntity.createEmptyFriendList();
 		}
 
@@ -71,6 +78,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 
 		List<UserDto> userList = userDao.fetchUsersByIds(friendIdList);
 		if (CollectionUtils.isEmpty(userList)) {
+			log.info("No friend list");
 			return FriendsResponseEntity.createEmptyFriendList();
 		}
 
@@ -82,11 +90,13 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		response.setSuccess(true);
 		response.setFriends(emailList);
 		response.setCount(emailList.size());
+		log.info("Friend list successfully retrieved");
 		return response;
 	}
 
 	@Override
 	public FriendsResponseEntity getCommonFriendList(ConnectionRequestEntity request) {
+		log.info("Retrieving common friend list");
 		RequestValidationUtil.validateConnectionRequest(request);
 
 		// get UserDto of the inputs and validate
@@ -100,12 +110,14 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		List<String> secondUserRelationList = UserUtil
 				.convertUserRelationListToRelatedIdList(userRelationDao.fetchUserRelationList(secondUser.getId()));
 		if (CollectionUtils.isEmpty(firstUserRelationList) || CollectionUtils.isEmpty(secondUserRelationList)) {
+			log.info("No common friend list");
 			return FriendsResponseEntity.createEmptyFriendList();
 		}
 		firstUserRelationList.retainAll(secondUserRelationList);
 
 		List<UserDto> userList = userDao.fetchUsersByIds(firstUserRelationList);
 		if (CollectionUtils.isEmpty(userList)) {
+			log.info("No common friend list");
 			return FriendsResponseEntity.createEmptyFriendList();
 		}
 
@@ -118,6 +130,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		response.setSuccess(true);
 		response.setFriends(emailList);
 		response.setCount(emailList.size());
+		log.info("Common friend list successfully retrieved");
 		return response;
 	}
 
@@ -138,6 +151,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 
 	@Override
 	public BasicResponseEntity createSubscribeConnection(UnidirectionalRequestEntity request) {
+		log.info("Creates a subscribe connection");
 		RequestValidationUtil.validateSubscribeRequest(request);
 
 		UserDto requestor = userDao.addUser(new UserDto(request.getRequestor()));
@@ -145,11 +159,13 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 
 		UserRelationKey relationFirstKey = new UserRelationKey(requestor.getId(), target.getId());
 		userRelationDao.addUserRelation(new UserRelationDto(relationFirstKey, RelationTypeEnum.SUBSCRIBE, false));
+		log.info("Subscription successfully created");
 		return BasicResponseEntity.createSuccessResponse();
 	}
 
 	@Override
 	public BasicResponseEntity blockUpdates(UnidirectionalRequestEntity request) {
+		log.info("Block updates of user");
 		RequestValidationUtil.validateSubscribeRequest(request);
 
 		UserDto requestor = userDao.fetchUserByEmail(request.getRequestor());
@@ -165,11 +181,13 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		userRelation.setBlock(true);
 		userRelationDao.addUserRelation(userRelation);
 
+		log.info("Block updates successfully performed");
 		return BasicResponseEntity.createSuccessResponse();
 	}
 
 	@Override
 	public RecipientsResponseEntity getRecipientsOfUpdate(UpdateRequestEntity request) {
+		log.info("Get recipient list of updates");
 		RequestValidationUtil.validateUpdateRequest(request);
 		UserDto user = userDao.fetchUserByEmail(request.getSender());
 		if (Objects.isNull(user)) {
@@ -177,6 +195,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		}
 		List<UserRelationDto> relationList = userRelationDao.fetchUserRelationListByRelatedId(user.getId());
 		if (CollectionUtils.isEmpty(relationList)) {
+			log.info("No recipient");
 			return RecipientsResponseEntity.createEmptyRecipientList();
 		}
 
@@ -187,6 +206,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 			}
 		}
 		if (CollectionUtils.isEmpty(recipientIdList)) {
+			log.info("No recipient");
 			return RecipientsResponseEntity.createEmptyRecipientList();
 		}
 
@@ -196,6 +216,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		userList.removeAll(userListFromText);
 		userList.addAll(userListFromText);
 		if (CollectionUtils.isEmpty(userList)) {
+			log.info("No recipient");
 			return RecipientsResponseEntity.createEmptyRecipientList();
 		}
 
@@ -207,13 +228,16 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		RecipientsResponseEntity response = new RecipientsResponseEntity();
 		response.setSuccess(true);
 		response.setRecipients(emailList);
+		log.info("Recipient list successfully retrieved");
 		return response;
 	}
 
 	private List<UserDto> getRecipientsFromText(UpdateRequestEntity request, UserDto user) {
+		log.info("Extracting email from update text");
 		List<String> emailListFromText = EmailUtil.extractEmailFromText(request.getText());
 		List<UserDto> recipientFromText = new ArrayList<>();
 		if (CollectionUtils.isEmpty(emailListFromText)) {
+			log.info("No email in update text");
 			return recipientFromText;
 		}
 		List<UserDto> userListFromText = userDao.fetchUserByEmail(emailListFromText);
@@ -223,6 +247,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 				recipientFromText.add(userDto);
 			}
 		}
+		log.info("email successfully extracted from text");
 		return recipientFromText;
 	}
 

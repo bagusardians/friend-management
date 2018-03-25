@@ -10,6 +10,9 @@ import com.spgroup.friendmanagement.entity.ExceptionResponseEntity;
 import com.spgroup.friendmanagement.enumeration.ErrorType;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @ControllerAdvice
 public class ExceptionControllerAdvice {
 
@@ -20,6 +23,7 @@ public class ExceptionControllerAdvice {
 	 */
 	@ExceptionHandler(value = FriendServiceException.class)
 	public ResponseEntity<ExceptionResponseEntity> handleFriendServiceException(FriendServiceException e) {
+		log.error("Error found {}", e.getErrorType(), e);
 		ErrorType errorType = e.getErrorType();
 		ErrorEntity error = new ErrorEntity();
 		error.setCode(errorType.getCode());
@@ -35,6 +39,7 @@ public class ExceptionControllerAdvice {
 	 */
 	@ExceptionHandler(value = Exception.class)
 	public ResponseEntity<ExceptionResponseEntity> handleException(Exception e) {
+		log.error("Unexpected Error found", e);
 		ErrorEntity error = new ErrorEntity();
 		error.setCode("500E001");
 		error.setDeveloperMessage(e.getMessage());
