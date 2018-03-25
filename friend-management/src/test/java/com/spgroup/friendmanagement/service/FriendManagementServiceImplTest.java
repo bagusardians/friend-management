@@ -3,6 +3,7 @@ package com.spgroup.friendmanagement.service;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,9 +43,13 @@ public class FriendManagementServiceImplTest {
 
 	private final String MOCK_UUID_2 = UUID.randomUUID().toString();
 
+	private final String MOCK_UUID_3 = UUID.randomUUID().toString();
+
 	private final String MOCK_EMAIL_1 = "bagus@yahoo.com";
 
 	private final String MOCK_EMAIL_2 = "ardi@yahoo.com";
+
+	private final String MOCK_EMAIL_3 = "syah@yahoo.com";
 
 	@Before
 	public void setUp() throws Exception {
@@ -212,10 +217,29 @@ public class FriendManagementServiceImplTest {
 		friends.add(MOCK_EMAIL_1);
 		friends.add(MOCK_EMAIL_2);
 		request.setFriends(friends);
+		Mockito.doReturn(new UserDto(MOCK_UUID_1, MOCK_EMAIL_1)).when(userDao).fetchUserByEmail(MOCK_EMAIL_1);
+		Mockito.doReturn(new UserDto(MOCK_UUID_2, MOCK_EMAIL_2)).when(userDao).fetchUserByEmail(MOCK_EMAIL_2);
+		List<UserRelationDto> relationList = new ArrayList<>();
+		UserRelationKey key1 = new UserRelationKey(MOCK_UUID_1, MOCK_UUID_3);
+		relationList.add(new UserRelationDto(key1, "FRIEND", false));
+		Mockito.doReturn(relationList).when(userRelationDao).fetchUserRelationList(MOCK_UUID_1);
+		List<UserRelationDto> relationList2 = new ArrayList<>();
+		UserRelationKey key2 = new UserRelationKey(MOCK_UUID_2, MOCK_UUID_3);
+		relationList2.add(new UserRelationDto(key2, "FRIEND", false));
+		Mockito.doReturn(relationList2).when(userRelationDao).fetchUserRelationList(MOCK_UUID_2);
+
+		List<String> userIdList = new ArrayList<>();
+		userIdList.add(MOCK_UUID_3);
+		List<UserDto> userDtoList = new ArrayList<>();
+		userDtoList.add(new UserDto(MOCK_UUID_3, MOCK_EMAIL_3));
+		Mockito.doReturn(userDtoList).when(userDao).fetchUsersByIds(userIdList);
+
 		FriendsResponseEntity expected = new FriendsResponseEntity();
 		expected.setSuccess(true);
+		expected.setFriends(Arrays.asList(MOCK_EMAIL_3));
+		expected.setCount(1);
 		FriendsResponseEntity actual = underTest.getCommonFriendList(request);
-		assertEquals(expected.isSuccess(), actual.isSuccess());
+		assertEquals(expected, actual);
 	}
 
 	@Test(expected = FriendServiceException.class)
