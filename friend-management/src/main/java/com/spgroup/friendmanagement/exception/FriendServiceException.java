@@ -1,7 +1,10 @@
 package com.spgroup.friendmanagement.exception;
 
-import org.springframework.http.HttpStatus;
+import com.spgroup.friendmanagement.enumeration.ErrorType;
 
+import lombok.Getter;
+
+@Getter
 public class FriendServiceException extends RuntimeException {
 
 	/**
@@ -9,28 +12,16 @@ public class FriendServiceException extends RuntimeException {
 	 */
 	private static final long serialVersionUID = 6989393105794403624L;
 
-	private final String errorMessage;
+	private final ErrorType errorType;
 
-	private final HttpStatus errorStatus;
-
-	public FriendServiceException(String errorMessage, HttpStatus errorStatus) {
+	public FriendServiceException(ErrorType errorType) {
 		super();
-		this.errorMessage = errorMessage;
-		this.errorStatus = errorStatus;
+		this.errorType = errorType;
 	}
 
-	public FriendServiceException(String errorMessage, HttpStatus errorStatus, IndexOutOfBoundsException e) {
+	public FriendServiceException(ErrorType errorType, Exception e) {
 		super(e);
-		this.errorMessage = errorMessage;
-		this.errorStatus = errorStatus;
-	}
-
-	public String getErrorMessage() {
-		return errorMessage;
-	}
-
-	public HttpStatus getErrorStatus() {
-		return errorStatus;
+		this.errorType = errorType;
 	}
 
 }

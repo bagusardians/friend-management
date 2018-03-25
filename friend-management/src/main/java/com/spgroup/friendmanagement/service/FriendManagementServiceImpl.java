@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -21,6 +20,7 @@ import com.spgroup.friendmanagement.entity.FriendsResponseEntity;
 import com.spgroup.friendmanagement.entity.RecipientsResponseEntity;
 import com.spgroup.friendmanagement.entity.UnidirectionalRequestEntity;
 import com.spgroup.friendmanagement.entity.UpdateRequestEntity;
+import com.spgroup.friendmanagement.enumeration.ErrorType;
 import com.spgroup.friendmanagement.enumeration.RelationTypeEnum;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 import com.spgroup.friendmanagement.util.EmailUtil;
@@ -56,7 +56,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		RequestValidationUtil.validateFriendsRequest(request);
 		UserDto user = userDao.fetchUserByEmail(request.getEmail());
 		if (Objects.isNull(user)) {
-			throw new FriendServiceException("Cannot find the specified user", HttpStatus.UNPROCESSABLE_ENTITY);
+			throw new FriendServiceException(ErrorType.USER_NOT_FOUND);
 		}
 
 		List<UserRelationDto> userRelationList = userRelationDao.fetchUserRelationList(user.getId());
@@ -92,7 +92,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		// get UserDto of the inputs and validate
 		UserDto firstUser = userDao.fetchUserByEmail(UserUtil.getFirstEmail(request));
 		UserDto secondUser = userDao.fetchUserByEmail(UserUtil.getSecondEmail(request));
-		validateRetrievedUsers(request, firstUser, secondUser);
+		validateBasicRetrievedUsers(firstUser, secondUser);
 
 		// get the User relation for these user dto and find the commonality
 		List<String> firstUserRelationList = UserUtil
@@ -121,27 +121,18 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		return response;
 	}
 
-	private void validateRetrievedUsers(ConnectionRequestEntity request, UserDto firstUser, UserDto secondUser) {
-		if (Objects.isNull(firstUser)) {
-			throw new FriendServiceException(
-					"Cannot find the specified user with email: " + UserUtil.getFirstEmail(request),
-					HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-		if (Objects.isNull(secondUser)) {
-			throw new FriendServiceException(
-					"Cannot find the specified user with email: " + UserUtil.getSecondEmail(request),
-					HttpStatus.UNPROCESSABLE_ENTITY);
+	private void validateBasicRetrievedUsers(UserDto firstUser, UserDto secondUser) {
+		if (Objects.isNull(firstUser) || Objects.isNull(secondUser)) {
+			throw new FriendServiceException(ErrorType.USER_NOT_FOUND);
 		}
 	}
 
-	private void validateRetrievedUsers(UnidirectionalRequestEntity request, UserDto requestor, UserDto target) {
+	private void validateUniRetrievedUsers(UserDto requestor, UserDto target) {
 		if (Objects.isNull(requestor)) {
-			throw new FriendServiceException("Cannot find the specified user with email: " + request.getRequestor(),
-					HttpStatus.UNPROCESSABLE_ENTITY);
+			throw new FriendServiceException(ErrorType.REQUESTOR_NOT_FOUND);
 		}
 		if (Objects.isNull(target)) {
-			throw new FriendServiceException("Cannot find the specified user with email: " + request.getTarget(),
-					HttpStatus.UNPROCESSABLE_ENTITY);
+			throw new FriendServiceException(ErrorType.TARGET_NOT_FOUND);
 		}
 	}
 
@@ -163,12 +154,12 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 
 		UserDto requestor = userDao.fetchUserByEmail(request.getRequestor());
 		UserDto target = userDao.fetchUserByEmail(request.getTarget());
-		validateRetrievedUsers(request, requestor, target);
+		validateUniRetrievedUsers(requestor, target);
 
 		UserRelationDto userRelation = userRelationDao.fetchCorrelationBetweenTwoUser(requestor.getId(),
 				target.getId());
 		if (Objects.isNull(userRelation)) {
-			throw new FriendServiceException("No connection from requestor to target", HttpStatus.UNPROCESSABLE_ENTITY);
+			throw new FriendServiceException(ErrorType.NO_RELATION);
 		}
 
 		userRelation.setBlock(true);
@@ -182,7 +173,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		RequestValidationUtil.validateUpdateRequest(request);
 		UserDto user = userDao.fetchUserByEmail(request.getSender());
 		if (Objects.isNull(user)) {
-			throw new FriendServiceException("Cannot find the specified sender", HttpStatus.UNPROCESSABLE_ENTITY);
+			throw new FriendServiceException(ErrorType.SENDER_NOT_FOUND);
 		}
 		List<UserRelationDto> relationList = userRelationDao.fetchUserRelationListByRelatedId(user.getId());
 		if (CollectionUtils.isEmpty(relationList)) {

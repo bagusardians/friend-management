@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 
 import com.google.common.collect.Lists;
 import com.spgroup.friendmanagement.dto.UserDto;
 import com.spgroup.friendmanagement.dto.UserRelationDto;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
+import com.spgroup.friendmanagement.enumeration.ErrorType;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 
 public class UserUtil {
@@ -22,23 +22,23 @@ public class UserUtil {
 
 	public static String getFirstEmail(ConnectionRequestEntity request) {
 		if (Objects.isNull(request) || CollectionUtils.isEmpty(request.getFriends())) {
-			throw new FriendServiceException("Invalid request entity", HttpStatus.UNPROCESSABLE_ENTITY);
+			throw new FriendServiceException(ErrorType.NULL_REQUEST_ENTITY);
 		}
 		try {
 			return request.getFriends().get(0);
 		} catch (IndexOutOfBoundsException e) {
-			throw new FriendServiceException("Error in retrieving first email", HttpStatus.INTERNAL_SERVER_ERROR, e);
+			throw new FriendServiceException(ErrorType.ERROR_FIRST_EMAIL, e);
 		}
 	}
 
 	public static String getSecondEmail(ConnectionRequestEntity request) {
 		if (Objects.isNull(request) || CollectionUtils.isEmpty(request.getFriends())) {
-			throw new FriendServiceException("Invalid request entity", HttpStatus.UNPROCESSABLE_ENTITY);
+			throw new FriendServiceException(ErrorType.NULL_REQUEST_ENTITY);
 		}
 		try {
 			return request.getFriends().get(1);
 		} catch (IndexOutOfBoundsException e) {
-			throw new FriendServiceException("Error in retrieving second email", HttpStatus.INTERNAL_SERVER_ERROR, e);
+			throw new FriendServiceException(ErrorType.ERROR_SECOND_EMAIL, e);
 		}
 	}
 

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.spgroup.friendmanagement.entity.ErrorEntity;
 import com.spgroup.friendmanagement.entity.ExceptionResponseEntity;
+import com.spgroup.friendmanagement.enumeration.ErrorType;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 
 @ControllerAdvice
@@ -19,11 +20,12 @@ public class ExceptionControllerAdvice {
 	 */
 	@ExceptionHandler(value = FriendServiceException.class)
 	public ResponseEntity<ExceptionResponseEntity> handleFriendServiceException(FriendServiceException e) {
+		ErrorType errorType = e.getErrorType();
 		ErrorEntity error = new ErrorEntity();
-		error.setCode("422E001");
-		error.setDeveloperMessage(e.getErrorMessage());
-		error.setUserMessage("Invalid input(s).");
-		return new ResponseEntity<>(ExceptionResponseEntity.createErrorEntity(error), e.getErrorStatus());
+		error.setCode(errorType.getCode());
+		error.setDeveloperMessage(errorType.getDeveloperMessage());
+		error.setUserMessage(errorType.getUserMessage());
+		return new ResponseEntity<>(ExceptionResponseEntity.createErrorEntity(error), errorType.getErrorStatus());
 	}
 
 	/**
