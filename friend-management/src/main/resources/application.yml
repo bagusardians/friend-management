@@ -14,3 +14,9 @@ server:
   servlet:
     context-path: /friend-management
     
+logging:
+  level:
+    root: info
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    

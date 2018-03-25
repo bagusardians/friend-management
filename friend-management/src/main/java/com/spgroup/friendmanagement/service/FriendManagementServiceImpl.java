@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -21,12 +20,16 @@ import com.spgroup.friendmanagement.entity.FriendsResponseEntity;
 import com.spgroup.friendmanagement.entity.RecipientsResponseEntity;
 import com.spgroup.friendmanagement.entity.UnidirectionalRequestEntity;
 import com.spgroup.friendmanagement.entity.UpdateRequestEntity;
+import com.spgroup.friendmanagement.enumeration.ErrorType;
 import com.spgroup.friendmanagement.enumeration.RelationTypeEnum;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 import com.spgroup.friendmanagement.util.EmailUtil;
 import com.spgroup.friendmanagement.util.RequestValidationUtil;
 import com.spgroup.friendmanagement.util.UserUtil;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class FriendManagementServiceImpl implements FriendManagementService {
 
@@ -38,6 +41,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 
 	@Override
 	public BasicResponseEntity createFriendConnection(ConnectionRequestEntity entity) {
+		log.info("Create a friend connection");
 		RequestValidationUtil.validateConnectionRequest(entity);
 
 		UserDto firstUser = userDao.addUser(new UserDto(UserUtil.getFirstEmail(entity)));
@@ -48,19 +52,22 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		UserRelationKey relationSecondKey = new UserRelationKey(secondUser.getId(), firstUser.getId());
 		userRelationDao.addUserRelation(new UserRelationDto(relationSecondKey, RelationTypeEnum.FRIEND, false));
 
+		log.info("successfully create a friend connection");
 		return BasicResponseEntity.createSuccessResponse();
 	}
 
 	@Override
 	public FriendsResponseEntity getFriendList(FriendsRequestEntity request) {
+		log.info("Retrieving friend list");
 		RequestValidationUtil.validateFriendsRequest(request);
 		UserDto user = userDao.fetchUserByEmail(request.getEmail());
 		if (Objects.isNull(user)) {
-			throw new FriendServiceException("Cannot find the specified user", HttpStatus.UNPROCESSABLE_ENTITY);
+			throw new FriendServiceException(ErrorType.USER_NOT_FOUND);
 		}
 
 		List<UserRelationDto> userRelationList = userRelationDao.fetchUserRelationList(user.getId());
 		if (CollectionUtils.isEmpty(userRelationList)) {
+			log.info("No friend list");
 			return FriendsResponseEntity.createEmptyFriendList();
 		}
 
@@ -71,6 +78,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 
 		List<UserDto> userList = userDao.fetchUsersByIds(friendIdList);
 		if (CollectionUtils.isEmpty(userList)) {
+			log.info("No friend list");
 			return FriendsResponseEntity.createEmptyFriendList();
 		}
 
@@ -82,17 +90,19 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		response.setSuccess(true);
 		response.setFriends(emailList);
 		response.setCount(emailList.size());
+		log.info("Friend list successfully retrieved");
 		return response;
 	}
 
 	@Override
 	public FriendsResponseEntity getCommonFriendList(ConnectionRequestEntity request) {
+		log.info("Retrieving common friend list");
 		RequestValidationUtil.validateConnectionRequest(request);
 
 		// get UserDto of the inputs and validate
 		UserDto firstUser = userDao.fetchUserByEmail(UserUtil.getFirstEmail(request));
 		UserDto secondUser = userDao.fetchUserByEmail(UserUtil.getSecondEmail(request));
-		validateRetrievedUsers(request, firstUser, secondUser);
+		validateBasicRetrievedUsers(firstUser, secondUser);
 
 		// get the User relation for these user dto and find the commonality
 		List<String> firstUserRelationList = UserUtil
@@ -100,12 +110,14 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		List<String> secondUserRelationList = UserUtil
 				.convertUserRelationListToRelatedIdList(userRelationDao.fetchUserRelationList(secondUser.getId()));
 		if (CollectionUtils.isEmpty(firstUserRelationList) || CollectionUtils.isEmpty(secondUserRelationList)) {
+			log.info("No common friend list");
 			return FriendsResponseEntity.createEmptyFriendList();
 		}
 		firstUserRelationList.retainAll(secondUserRelationList);
 
 		List<UserDto> userList = userDao.fetchUsersByIds(firstUserRelationList);
 		if (CollectionUtils.isEmpty(userList)) {
+			log.info("No common friend list");
 			return FriendsResponseEntity.createEmptyFriendList();
 		}
 
@@ -118,35 +130,28 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		response.setSuccess(true);
 		response.setFriends(emailList);
 		response.setCount(emailList.size());
+		log.info("Common friend list successfully retrieved");
 		return response;
 	}
 
-	private void validateRetrievedUsers(ConnectionRequestEntity request, UserDto firstUser, UserDto secondUser) {
-		if (Objects.isNull(firstUser)) {
-			throw new FriendServiceException(
-					"Cannot find the specified user with email: " + UserUtil.getFirstEmail(request),
-					HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-		if (Objects.isNull(secondUser)) {
-			throw new FriendServiceException(
-					"Cannot find the specified user with email: " + UserUtil.getSecondEmail(request),
-					HttpStatus.UNPROCESSABLE_ENTITY);
+	private void validateBasicRetrievedUsers(UserDto firstUser, UserDto secondUser) {
+		if (Objects.isNull(firstUser) || Objects.isNull(secondUser)) {
+			throw new FriendServiceException(ErrorType.USER_NOT_FOUND);
 		}
 	}
 
-	private void validateRetrievedUsers(UnidirectionalRequestEntity request, UserDto requestor, UserDto target) {
+	private void validateUniRetrievedUsers(UserDto requestor, UserDto target) {
 		if (Objects.isNull(requestor)) {
-			throw new FriendServiceException("Cannot find the specified user with email: " + request.getRequestor(),
-					HttpStatus.UNPROCESSABLE_ENTITY);
+			throw new FriendServiceException(ErrorType.REQUESTOR_NOT_FOUND);
 		}
 		if (Objects.isNull(target)) {
-			throw new FriendServiceException("Cannot find the specified user with email: " + request.getTarget(),
-					HttpStatus.UNPROCESSABLE_ENTITY);
+			throw new FriendServiceException(ErrorType.TARGET_NOT_FOUND);
 		}
 	}
 
 	@Override
 	public BasicResponseEntity createSubscribeConnection(UnidirectionalRequestEntity request) {
+		log.info("Creates a subscribe connection");
 		RequestValidationUtil.validateSubscribeRequest(request);
 
 		UserDto requestor = userDao.addUser(new UserDto(request.getRequestor()));
@@ -154,38 +159,43 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 
 		UserRelationKey relationFirstKey = new UserRelationKey(requestor.getId(), target.getId());
 		userRelationDao.addUserRelation(new UserRelationDto(relationFirstKey, RelationTypeEnum.SUBSCRIBE, false));
+		log.info("Subscription successfully created");
 		return BasicResponseEntity.createSuccessResponse();
 	}
 
 	@Override
 	public BasicResponseEntity blockUpdates(UnidirectionalRequestEntity request) {
+		log.info("Block updates of user");
 		RequestValidationUtil.validateSubscribeRequest(request);
 
 		UserDto requestor = userDao.fetchUserByEmail(request.getRequestor());
 		UserDto target = userDao.fetchUserByEmail(request.getTarget());
-		validateRetrievedUsers(request, requestor, target);
+		validateUniRetrievedUsers(requestor, target);
 
 		UserRelationDto userRelation = userRelationDao.fetchCorrelationBetweenTwoUser(requestor.getId(),
 				target.getId());
 		if (Objects.isNull(userRelation)) {
-			throw new FriendServiceException("No connection from requestor to target", HttpStatus.UNPROCESSABLE_ENTITY);
+			throw new FriendServiceException(ErrorType.NO_RELATION);
 		}
 
 		userRelation.setBlock(true);
 		userRelationDao.addUserRelation(userRelation);
 
+		log.info("Block updates successfully performed");
 		return BasicResponseEntity.createSuccessResponse();
 	}
 
 	@Override
 	public RecipientsResponseEntity getRecipientsOfUpdate(UpdateRequestEntity request) {
+		log.info("Get recipient list of updates");
 		RequestValidationUtil.validateUpdateRequest(request);
 		UserDto user = userDao.fetchUserByEmail(request.getSender());
 		if (Objects.isNull(user)) {
-			throw new FriendServiceException("Cannot find the specified sender", HttpStatus.UNPROCESSABLE_ENTITY);
+			throw new FriendServiceException(ErrorType.SENDER_NOT_FOUND);
 		}
 		List<UserRelationDto> relationList = userRelationDao.fetchUserRelationListByRelatedId(user.getId());
 		if (CollectionUtils.isEmpty(relationList)) {
+			log.info("No recipient");
 			return RecipientsResponseEntity.createEmptyRecipientList();
 		}
 
@@ -196,6 +206,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 			}
 		}
 		if (CollectionUtils.isEmpty(recipientIdList)) {
+			log.info("No recipient");
 			return RecipientsResponseEntity.createEmptyRecipientList();
 		}
 
@@ -205,6 +216,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		userList.removeAll(userListFromText);
 		userList.addAll(userListFromText);
 		if (CollectionUtils.isEmpty(userList)) {
+			log.info("No recipient");
 			return RecipientsResponseEntity.createEmptyRecipientList();
 		}
 
@@ -216,13 +228,16 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		RecipientsResponseEntity response = new RecipientsResponseEntity();
 		response.setSuccess(true);
 		response.setRecipients(emailList);
+		log.info("Recipient list successfully retrieved");
 		return response;
 	}
 
 	private List<UserDto> getRecipientsFromText(UpdateRequestEntity request, UserDto user) {
+		log.info("Extracting email from update text");
 		List<String> emailListFromText = EmailUtil.extractEmailFromText(request.getText());
 		List<UserDto> recipientFromText = new ArrayList<>();
 		if (CollectionUtils.isEmpty(emailListFromText)) {
+			log.info("No email in update text");
 			return recipientFromText;
 		}
 		List<UserDto> userListFromText = userDao.fetchUserByEmail(emailListFromText);
@@ -232,6 +247,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 				recipientFromText.add(userDto);
 			}
 		}
+		log.info("email successfully extracted from text");
 		return recipientFromText;
 	}
 
