@@ -82,4 +82,9 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		return response;
 	}
 
+	@Override
+	public FriendsResponseEntity getCommonFriendList(ConnectionRequestEntity request) {
+		return FriendsResponseEntity.createEmptyFriendList();
+	}
+
 }

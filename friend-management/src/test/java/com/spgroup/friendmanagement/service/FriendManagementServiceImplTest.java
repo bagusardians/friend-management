@@ -205,4 +205,17 @@ public class FriendManagementServiceImplTest {
 		assertEquals(expected.isSuccess(), actual.isSuccess());
 	}
 
+	@Test
+	public void testGetCommonFriendListSuccess() {
+		ConnectionRequestEntity request = new ConnectionRequestEntity();
+		List<String> friends = new ArrayList<>();
+		friends.add(MOCK_EMAIL_1);
+		friends.add(MOCK_EMAIL_2);
+		request.setFriends(friends);
+		FriendsResponseEntity expected = new FriendsResponseEntity();
+		expected.setSuccess(true);
+		FriendsResponseEntity actual = underTest.getCommonFriendList(request);
+		assertEquals(expected.isSuccess(), actual.isSuccess());
+	}
+
 }
