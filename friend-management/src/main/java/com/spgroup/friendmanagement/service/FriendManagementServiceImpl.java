@@ -178,6 +178,7 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 
 	@Override
 	public RecipientsResponseEntity getRecipientsOfUpdate(UpdateRequestEntity request) {
+		RequestValidationUtil.validateUpdateRequest(request);
 		RecipientsResponseEntity response = new RecipientsResponseEntity();
 		response.setSuccess(true);
 		return response;

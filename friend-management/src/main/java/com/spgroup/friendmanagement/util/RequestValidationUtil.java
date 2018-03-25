@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 import com.spgroup.friendmanagement.entity.ConnectionRequestEntity;
 import com.spgroup.friendmanagement.entity.FriendsRequestEntity;
 import com.spgroup.friendmanagement.entity.UnidirectionalRequestEntity;
+import com.spgroup.friendmanagement.entity.UpdateRequestEntity;
 import com.spgroup.friendmanagement.exception.FriendServiceException;
 
 public class RequestValidationUtil {
@@ -56,6 +57,16 @@ public class RequestValidationUtil {
 		} else if (entity.getRequestor().equals(entity.getTarget())) {
 			throw new FriendServiceException("Requestor cannor subscribe itself", HttpStatus.UNPROCESSABLE_ENTITY);
 		} else if (!EmailValidationUtil.isEmailsValid(entity.getRequestor(), entity.getTarget())) {
+			throw new FriendServiceException("Invalid email format", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+
+	public static void validateUpdateRequest(UpdateRequestEntity entity) {
+		if (Objects.isNull(entity)) {
+			throw new FriendServiceException("Request entity is null", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+		String email = entity.getSender();
+		if (!EmailValidationUtil.isEmailsValid(email)) {
 			throw new FriendServiceException("Invalid email format", HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}

@@ -550,4 +550,22 @@ public class FriendManagementServiceImplTest {
 		assertEquals(expected.isSuccess(), actual.isSuccess());
 	}
 
+	@Test(expected = FriendServiceException.class)
+	public void testGetRecipientsOfUpdateInvalidEmail() {
+		String email = "invalid";
+		UpdateRequestEntity request = new UpdateRequestEntity();
+		request.setSender(email);
+		RecipientsResponseEntity expected = new RecipientsResponseEntity();
+		expected.setSuccess(true);
+		underTest.getRecipientsOfUpdate(request);
+	}
+
+	@Test(expected = FriendServiceException.class)
+	public void testGetRecipientsOfUpdateInvalidRequest() {
+		UpdateRequestEntity request = null;
+		RecipientsResponseEntity expected = new RecipientsResponseEntity();
+		expected.setSuccess(true);
+		underTest.getRecipientsOfUpdate(request);
+	}
+
 }
