@@ -1,3 +1,3 @@
-FROM mysql:8
+FROM mysql:5.7
 
-ADD friend-management.sql /docker-entrypoint-initdb.d/
+ADD friend_management.sql /docker-entrypoint-initdb.d/
