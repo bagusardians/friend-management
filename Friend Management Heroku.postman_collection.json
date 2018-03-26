@@ -1,0 +1,194 @@
+{
+	"info": {
+		"_postman_id": "e1ea5a15-927a-4532-bcda-c868db9d729f",
+		"name": "Friend Management Heroku",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Friend List [Heroku]",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\":\"lucy@example.com\"\n}"
+				},
+				"url": {
+					"raw": "https://mysterious-springs-34492.herokuapp.com/friend-management/friends",
+					"protocol": "https",
+					"host": [
+						"mysterious-springs-34492",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"friend-management",
+						"friends"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Make a friend connection [Heroku]",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"friends\":\r\n    [\r\n      \"lucy@example.com\",\r\n      \"xander@example.com\"\r\n    ]\r\n}"
+				},
+				"url": {
+					"raw": "https://mysterious-springs-34492.herokuapp.com/friend-management/connect/friend",
+					"protocol": "https",
+					"host": [
+						"mysterious-springs-34492",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"friend-management",
+						"connect",
+						"friend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Make a subscribe connection  [Heroku]",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"requestor\": \"jessica@example.com\",\r\n  \"target\": \"norman@example.com\"\r\n}"
+				},
+				"url": {
+					"raw": "https://mysterious-springs-34492.herokuapp.com/friend-management/connect/subscribe",
+					"protocol": "https",
+					"host": [
+						"mysterious-springs-34492",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"friend-management",
+						"connect",
+						"subscribe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Block Updates  [Heroku]",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"requestor\": \"lizzy@example.com\",\r\n  \"target\": \"anna@example.com\"\r\n}"
+				},
+				"url": {
+					"raw": "https://mysterious-springs-34492.herokuapp.com/friend-management/connect/block",
+					"protocol": "https",
+					"host": [
+						"mysterious-springs-34492",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"friend-management",
+						"connect",
+						"block"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Common Friend List  [Heroku]",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"friends\":\r\n    [\r\n      \"lucy@example.com\",\r\n      \"jane@example.com\"\r\n    ]\r\n}"
+				},
+				"url": {
+					"raw": "https://mysterious-springs-34492.herokuapp.com/friend-management/friends/common",
+					"protocol": "https",
+					"host": [
+						"mysterious-springs-34492",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"friend-management",
+						"friends",
+						"common"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Recipient of Updates  [Heroku]",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"sender\":\"lucy@example.com\",\r\n\t\"text\":\"hola jessica@example.com\"\r\n}"
+				},
+				"url": {
+					"raw": "https://mysterious-springs-34492.herokuapp.com/friend-management/recipients/update",
+					"protocol": "https",
+					"host": [
+						"mysterious-springs-34492",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"friend-management",
+						"recipients",
+						"update"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
