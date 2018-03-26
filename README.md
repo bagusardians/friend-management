@@ -198,6 +198,7 @@ Eligibility for receiving updates from i.e. "john@example.com":
   - has a friend connection with "john@example.com"
   - has subscribed to updates from "john@example.com"
   - has been @mentioned in the update
+- if the email mentioned in the updates never adding friends/subscibe, the system will consider it is not registered user, thus not receiving updates.
 
 #### input
 ```
