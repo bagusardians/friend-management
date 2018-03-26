@@ -5,11 +5,17 @@ Friend management is an api where you can manage your friend list. you can add f
 ## Run and Test
 ### Public Cloud
 Accessing the public cloud directly without installing in local. 
+
 App: https://mysterious-springs-34492.herokuapp.com/friend-management/
+
 Swagger-UI: https://mysterious-springs-34492.herokuapp.com/friend-management/swagger-ui.html/
+
 to test the application, you can use the swagger-ui or use [Postman].
+
 the postman api collection can be found the main folder with the name: **Friend Management Heroku.postman_collection.json**
+
 *please be advised that this is free public cloud, which has limited resources and not located in asia. do expect slow performance.*
+
 
 ### Local
 Build the spring boot app, by going to its folder in friend-management
@@ -23,14 +29,19 @@ $ cd ..
 $ docker-compose up --build
 ```
 Wait until both database and app is up and running
+
 the application can be accessed in http://localhost:8090/friend-management/
+
 Swagger-UI: http://localhost:8090/friend-management/swagger-ui.html
+
 to test the application, you can use the swagger-ui or use [Postman].
+
 the postman api collection can be found the main folder with the name: **Friend Management Local.postman_collection.json**
+
 
 ## Feature, API Docs and Assumptions
 
-## Adding Friend
+### Adding Friend
 > As a user, I need an API to create a friend connection between two email addresses.
   - Provides two email address to make a friend connection between them
   - Email format will be validated before friend connection executed
@@ -68,7 +79,7 @@ the postman api collection can be found the main folder with the name: **Friend 
 }
 ```
 
-## Get Friend List
+### Get Friend List
 > As a user, I need an API to retrieve the friends list for an email address.
   - Provides email address to see the friend list
   - Email format will be validated before friend connection executed
@@ -105,7 +116,7 @@ the postman api collection can be found the main folder with the name: **Friend 
   }
 }
 ```
-## Get Common Friend List
+### Get Common Friend List
 > As a user, I need an API to retrieve the common friends list between two email addresses.
   - Provides two email address to retrieves common friends
   - Email format will be validated before friend connection executed
@@ -146,7 +157,7 @@ the postman api collection can be found the main folder with the name: **Friend 
   }
 }
 ```
-## Subscribe updates
+### Subscribe updates
 > As a user, I need an API to subscribe to updates from an email address.
   - Provides requestor email to subscribe updates from target email
   - Email address will be validated
@@ -179,7 +190,7 @@ the postman api collection can be found the main folder with the name: **Friend 
   }
 }
 ```
-## Block updates
+### Block updates
 > As a user, I need an API to block updates from an email address.
   - Provides requestor email to block updates from target email
   - Email format will be validated before friend connection executed
@@ -212,7 +223,7 @@ the postman api collection can be found the main folder with the name: **Friend 
   }
 }
 ```
-## Retrieve Recipient of Updates
+### Retrieve Recipient of Updates
 > As a user, I need an API to retrieve all email addresses that can receive updates from an email address.
   - Provides sender email address and text message
   - Text can mention email address of another user
@@ -257,7 +268,7 @@ Eligibility for receiving updates from i.e. "john@example.com":
   }
 }
 ```
-# Error List
+## Error List
 
 | Error Code | Name | HTTP Status | Description |
 | ------ | ------ | ------ | ------ |
