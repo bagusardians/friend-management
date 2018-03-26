@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "cd7313a9-523d-4604-a6c2-d46014b0a0dc",
-		"name": "SP Group Friend Management",
+		"name": "Friend Management Local",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -20,12 +20,12 @@
 					"raw": "{\r\n  \"friends\":\r\n    [\r\n      \"jacob@example.com\",\r\n      \"bagus@example.com\"\r\n    ]\r\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/friend-management/connect/friend",
+					"raw": "http://localhost:8090/friend-management/connect/friend",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8090",
 					"path": [
 						"friend-management",
 						"connect",
@@ -47,15 +47,15 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"requestor\": \"bob@example.com\",\r\n  \"target\": \"jane@example.com\"\r\n}"
+					"raw": "{\r\n  \"requestor\": \"erfer@example.com\",\r\n  \"target\": \"erferfef@example.com\"\r\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/friend-management/connect/subscribe",
+					"raw": "http://localhost:8090/friend-management/connect/subscribe",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8090",
 					"path": [
 						"friend-management",
 						"connect",
@@ -80,12 +80,12 @@
 					"raw": "{\r\n  \"requestor\": \"simon@example.com\",\r\n  \"target\": \"jane@example.com\"\r\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/friend-management/connect/block",
+					"raw": "http://localhost:8090/friend-management/connect/block",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8090",
 					"path": [
 						"friend-management",
 						"connect",
@@ -107,15 +107,15 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"email\":\"jane@example.com\"\n}"
+					"raw": "{\n\t\"email\":\"b@a.com\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/friend-management/friends",
+					"raw": "http://localhost:8090/friend-management/friends",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8090",
 					"path": [
 						"friend-management",
 						"friends"
@@ -139,12 +139,12 @@
 					"raw": "{\r\n  \"friends\":\r\n    [\r\n      \"peralta@example.com\",\r\n      \"jane@example.com\"\r\n    ]\r\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/friend-management/friends/common",
+					"raw": "http://localhost:8090/friend-management/friends/common",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8090",
 					"path": [
 						"friend-management",
 						"friends",
@@ -169,12 +169,12 @@
 					"raw": "{\r\n\t\"sender\":\"jane@example.com\",\r\n\t\"text\":\"hola peralta@example.com jacob@example.com\"\r\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/friend-management/recipients/update",
+					"raw": "http://localhost:8090/friend-management/recipients/update",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8090",
 					"path": [
 						"friend-management",
 						"recipients",
