@@ -1,7 +1,34 @@
 # Friend-Management
 
 Friend management is an api where you can manage your friend list. you can add friend, check your friend list, see common friends, subscribe updates from user, block updates from your friends, and check who will receive your updates.
-to directly run the application, please go to **[Run](#run)** section. 
+
+## Run and Test
+### Public Cloud
+Accessing the public cloud directly without installing in local. 
+App: https://mysterious-springs-34492.herokuapp.com/friend-management/
+Swagger-UI: https://mysterious-springs-34492.herokuapp.com/friend-management/swagger-ui.html/
+to test the application, you can use the swagger-ui or use [Postman].
+the postman api collection can be found the main folder with the name: **Friend Management Heroku.postman_collection.json**
+*please be advised that this is free public cloud, which has limited resources and not located in asia. do expect slow performance.*
+
+### Local
+Build the spring boot app, by going to its folder in friend-management
+```sh
+$ cd friend-management
+$ ./gradlew build
+```
+Go back to the main folder and run the docker-compose
+```sh
+$ cd ..
+$ docker-compose up --build
+```
+Wait until both database and app is up and running
+the application can be accessed in http://localhost:8090/friend-management/
+Swagger-UI: http://localhost:8090/friend-management/swagger-ui.html
+to test the application, you can use the swagger-ui or use [Postman].
+the postman api collection can be found the main folder with the name: **Friend Management Local.postman_collection.json**
+
+## Feature, API Docs and Assumptions
 
 ## Adding Friend
 > As a user, I need an API to create a friend connection between two email addresses.
@@ -261,23 +288,6 @@ Eligibility for receiving updates from i.e. "john@example.com":
 * [Docker] - run applications securely isolated in a container, packaged with all its dependencies and libraries.
 * [Swagger] - Api documentation
 
-
-## Run
-
-Build the spring boot app, by going to its folder in friend-management
-```sh
-$ cd friend-management
-$ ./gradlew build
-```
-Go back to the main folder and run the docker-compose
-```sh
-$ cd ..
-$ docker-compose up --build
-```
-Wait until both database and app is up and running
-the application can be accessed in http://localhost:8090/friend-management/
-
-to test the application, you can use the swagger-ui or use [Postman]. the postman api collection can be found the main folder with the name SP Group Friend Management.postman_collection.json
 
 ## Documentation
 The documentation of the application is this readme file. 
