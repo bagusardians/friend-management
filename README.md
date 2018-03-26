@@ -260,6 +260,7 @@ Eligibility for receiving updates from i.e. "john@example.com":
 * [Docker] - run applications securely isolated in a container, packaged with all its dependencies and libraries.
 * [Swagger] - Api documentation
 
+
 ## Run
 
 Build the spring boot app, by going to its folder in friend-management
@@ -275,6 +276,8 @@ $ docker-compose up --build
 Wait until both database and app is up and running
 the application can be accessed in http://localhost:8090/friend-management/
 
+to test the application, you can use the swagger-ui or use [Postman]. the postman api collection can be found the main folder with the name SP Group Friend Management.postman_collection.json
+
 ## Documentation
 The documentation of the application is this readme file. 
 You can also access the api documentation using swagger UI in http://localhost:8090/friend-management/swagger-ui.html
@@ -287,3 +290,4 @@ You can also access the api documentation using swagger UI in http://localhost:8
 [mysql]: <https://www.mysql.com/>
 [Docker]: <https://www.docker.com/>
 [Swagger]: <https://swagger.io/>
+[Postman]: <https://www.getpostman.com/>
