@@ -1,7 +1,7 @@
 # Friend-Management
 
 Friend management is an api where you can manage your friend list. you can add friend, check your friend list, see common friends, subscribe updates from user, block updates from your friends, and check who will receive your updates.
-to directly run the application, please go to **[Run](#Run)** section.
+to directly run the application, please go to **[Run](#run)** section.
 
 ## Adding Friend
 > As a user, I need an API to create a friend connection between two email addresses.
