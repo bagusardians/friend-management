@@ -1,7 +1,7 @@
 # Friend-Management
 
 Friend management is an api where you can manage your friend list. you can add friend, check your friend list, see common friends, subscribe updates from user, block updates from your friends, and check who will receive your updates.
-to directly run the application, please go to Run section.
+to directly run the application, please go to **[Run](#Run)** section.
 
 ## Adding Friend
 > As a user, I need an API to create a friend connection between two email addresses.
@@ -246,7 +246,7 @@ Eligibility for receiving updates from i.e. "john@example.com":
 | 422E011 | TARGET_NOT_FOUND | Unprocessable Entity (422) | Cannot find the specified target |
 | 422E012 | NO_RELATION | Unprocessable Entity (422) | No relation between user and target |
 | 422E012 | SENDER_NOT_FOUND | Unprocessable Entity (422) | Cannot find the specified sender |
-| 500E001 | INTERNAL_SERVER_ERROR | Internal Server Error (500) | Cannot find the specified target |
+| 500E001 | INTERNAL_SERVER_ERROR | Internal Server Error (500) | Please check the log for the detail |
 | 500E002 | ERROR_FIRST_EMAIL | Internal Server Error (500) | Error in extracting first email |
 | 500E003 | ERROR_SECOND_EMAIL | Internal Server Error (500) | Error in extracting second email |
 
