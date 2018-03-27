@@ -19,6 +19,15 @@ public class RequestValidationUtil {
 		throw new IllegalStateException("Utility class");
 	}
 
+	/**
+	 * validate {@link ConnectionRequestEntity} content
+	 * <p>
+	 * return false if entity is null, friends is empty, size not equals 2, same
+	 * email value, and invalid email
+	 * </p>
+	 * 
+	 * @param entity
+	 */
 	public static void validateConnectionRequest(ConnectionRequestEntity entity) {
 		if (Objects.isNull(entity)) {
 			throw new FriendServiceException(ErrorType.NULL_REQUEST_ENTITY);
@@ -35,6 +44,14 @@ public class RequestValidationUtil {
 		}
 	}
 
+	/**
+	 * validate {@link FriendsRequestEntity} content
+	 * <p>
+	 * return false is entity is null, email is invalid
+	 * </p>
+	 * 
+	 * @param entity
+	 */
 	public static void validateFriendsRequest(FriendsRequestEntity entity) {
 		if (Objects.isNull(entity)) {
 			throw new FriendServiceException(ErrorType.NULL_REQUEST_ENTITY);
@@ -45,6 +62,15 @@ public class RequestValidationUtil {
 		}
 	}
 
+	/**
+	 * validate {@link UnidirectionalRequestEntity} content
+	 * <p>
+	 * return false if entity is null, requestor email is invalid, target email is
+	 * invalid
+	 * </p>
+	 * 
+	 * @param entity
+	 */
 	public static void validateSubscribeRequest(UnidirectionalRequestEntity entity) {
 		if (Objects.isNull(entity)) {
 			throw new FriendServiceException(ErrorType.NULL_REQUEST_ENTITY);
@@ -60,6 +86,14 @@ public class RequestValidationUtil {
 		}
 	}
 
+	/**
+	 * validate {@link UpdateRequestEntity} content
+	 * <p>
+	 * return false if entity is null and sender email is invalid
+	 * </p>
+	 * 
+	 * @param entity
+	 */
 	public static void validateUpdateRequest(UpdateRequestEntity entity) {
 		if (Objects.isNull(entity)) {
 			throw new FriendServiceException(ErrorType.NULL_REQUEST_ENTITY);
