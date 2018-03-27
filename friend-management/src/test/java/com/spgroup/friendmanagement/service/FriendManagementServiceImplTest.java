@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -147,8 +148,10 @@ public class FriendManagementServiceImplTest {
 		Mockito.doReturn(userDtoList).when(userDao).fetchUsersByIds(userIdList);
 		FriendsResponseEntity expected = new FriendsResponseEntity();
 		expected.setSuccess(true);
+		expected.setFriends(Arrays.asList(MOCK_EMAIL_2));
+		expected.setCount(1);
 		FriendsResponseEntity actual = underTest.getFriendList(request);
-		assertEquals(expected.isSuccess(), actual.isSuccess());
+		assertEquals(expected, actual);
 	}
 
 	@Test
@@ -167,8 +170,10 @@ public class FriendManagementServiceImplTest {
 		Mockito.doReturn(null).when(userDao).fetchUsersByIds(userIdList);
 		FriendsResponseEntity expected = new FriendsResponseEntity();
 		expected.setSuccess(true);
+		expected.setFriends(Lists.newArrayList());
+		expected.setCount(0);
 		FriendsResponseEntity actual = underTest.getFriendList(request);
-		assertEquals(expected.isSuccess(), actual.isSuccess());
+		assertEquals(expected, actual);
 	}
 
 	@Test
@@ -179,8 +184,10 @@ public class FriendManagementServiceImplTest {
 		Mockito.doReturn(null).when(userRelationDao).fetchUserRelationList(MOCK_UUID_1);
 		FriendsResponseEntity expected = new FriendsResponseEntity();
 		expected.setSuccess(true);
+		expected.setFriends(Lists.newArrayList());
+		expected.setCount(0);
 		FriendsResponseEntity actual = underTest.getFriendList(request);
-		assertEquals(expected.isSuccess(), actual.isSuccess());
+		assertEquals(expected, actual);
 	}
 
 	@Test(expected = FriendServiceException.class)
@@ -409,7 +416,7 @@ public class FriendManagementServiceImplTest {
 		BasicResponseEntity expected = new BasicResponseEntity();
 		expected.setSuccess(true);
 		BasicResponseEntity actual = underTest.createSubscribeConnection(request);
-		assertEquals(expected.isSuccess(), actual.isSuccess());
+		assertEquals(expected, actual);
 	}
 
 	@Test(expected = FriendServiceException.class)
@@ -464,7 +471,7 @@ public class FriendManagementServiceImplTest {
 		BasicResponseEntity expected = new BasicResponseEntity();
 		expected.setSuccess(true);
 		BasicResponseEntity actual = underTest.blockUpdates(request);
-		assertEquals(expected.isSuccess(), actual.isSuccess());
+		assertEquals(expected, actual);
 	}
 
 	@Test(expected = FriendServiceException.class)
@@ -566,8 +573,9 @@ public class FriendManagementServiceImplTest {
 
 		RecipientsResponseEntity expected = new RecipientsResponseEntity();
 		expected.setSuccess(true);
+		expected.setRecipients(Arrays.asList(MOCK_EMAIL_3, MOCK_EMAIL_2));
 		BasicResponseEntity actual = underTest.getRecipientsOfUpdate(request);
-		assertEquals(expected.isSuccess(), actual.isSuccess());
+		assertEquals(expected, actual);
 	}
 
 	@Test
@@ -601,8 +609,34 @@ public class FriendManagementServiceImplTest {
 
 		RecipientsResponseEntity expected = new RecipientsResponseEntity();
 		expected.setSuccess(true);
+		expected.setRecipients(Arrays.asList(MOCK_EMAIL_3, MOCK_EMAIL_2));
 		BasicResponseEntity actual = underTest.getRecipientsOfUpdate(request);
-		assertEquals(expected.isSuccess(), actual.isSuccess());
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void testGetRecipientsOfUpdateSuccessNoMention() {
+		UpdateRequestEntity request = new UpdateRequestEntity();
+		request.setSender(MOCK_EMAIL_1);
+		request.setText("test ");
+		Mockito.doReturn(new UserDto(MOCK_UUID_1, MOCK_EMAIL_1)).when(userDao).fetchUserByEmail(MOCK_EMAIL_1);
+		List<UserRelationDto> relationList = new ArrayList<>();
+		UserRelationKey key1 = new UserRelationKey(MOCK_UUID_3, MOCK_UUID_1);
+		relationList.add(new UserRelationDto(key1, RelationTypeEnum.FRIEND, false));
+		Mockito.doReturn(relationList).when(userRelationDao).fetchUserRelationListByRelatedId(MOCK_UUID_1);
+
+		List<String> userIdList = new ArrayList<>();
+		userIdList.add(MOCK_UUID_3);
+		List<UserDto> userDtoList = new ArrayList<>();
+		userDtoList.add(new UserDto(MOCK_UUID_3, MOCK_EMAIL_3));
+
+		Mockito.doReturn(userDtoList).when(userDao).fetchUsersByIds(userIdList);
+
+		RecipientsResponseEntity expected = new RecipientsResponseEntity();
+		expected.setSuccess(true);
+		expected.setRecipients(Arrays.asList(MOCK_EMAIL_3));
+		BasicResponseEntity actual = underTest.getRecipientsOfUpdate(request);
+		assertEquals(expected, actual);
 	}
 
 	@Test
@@ -636,8 +670,9 @@ public class FriendManagementServiceImplTest {
 
 		RecipientsResponseEntity expected = new RecipientsResponseEntity();
 		expected.setSuccess(true);
+		expected.setRecipients(Arrays.asList(MOCK_EMAIL_3));
 		BasicResponseEntity actual = underTest.getRecipientsOfUpdate(request);
-		assertEquals(expected.isSuccess(), actual.isSuccess());
+		assertEquals(expected, actual);
 	}
 
 	@Test
@@ -651,8 +686,9 @@ public class FriendManagementServiceImplTest {
 		Mockito.doReturn(relationList).when(userRelationDao).fetchUserRelationListByRelatedId(MOCK_UUID_1);
 		RecipientsResponseEntity expected = new RecipientsResponseEntity();
 		expected.setSuccess(true);
+		expected.setRecipients(Lists.newArrayList());
 		BasicResponseEntity actual = underTest.getRecipientsOfUpdate(request);
-		assertEquals(expected.isSuccess(), actual.isSuccess());
+		assertEquals(expected, actual);
 	}
 
 	@Test(expected = FriendServiceException.class)
@@ -673,8 +709,9 @@ public class FriendManagementServiceImplTest {
 
 		RecipientsResponseEntity expected = new RecipientsResponseEntity();
 		expected.setSuccess(true);
+		expected.setRecipients(Lists.newArrayList());
 		BasicResponseEntity actual = underTest.getRecipientsOfUpdate(request);
-		assertEquals(expected.isSuccess(), actual.isSuccess());
+		assertEquals(expected, actual);
 	}
 
 	@Test
@@ -690,6 +727,7 @@ public class FriendManagementServiceImplTest {
 
 		RecipientsResponseEntity expected = new RecipientsResponseEntity();
 		expected.setSuccess(true);
+		expected.setRecipients(Lists.newArrayList());
 		BasicResponseEntity actual = underTest.getRecipientsOfUpdate(request);
 		assertEquals(expected.isSuccess(), actual.isSuccess());
 	}

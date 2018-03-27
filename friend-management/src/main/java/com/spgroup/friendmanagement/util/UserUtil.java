@@ -20,9 +20,18 @@ public class UserUtil {
 		throw new IllegalStateException("Utility class");
 	}
 
+	/**
+	 * extract first email from friend list in request entity
+	 * 
+	 * @param request
+	 * @return
+	 */
 	public static String getFirstEmail(ConnectionRequestEntity request) {
-		if (Objects.isNull(request) || CollectionUtils.isEmpty(request.getFriends())) {
+		if (Objects.isNull(request)) {
 			throw new FriendServiceException(ErrorType.NULL_REQUEST_ENTITY);
+		}
+		if (CollectionUtils.isEmpty(request.getFriends())) {
+			throw new FriendServiceException(ErrorType.EMPTY_FRIEND_PARAM);
 		}
 		try {
 			return request.getFriends().get(0);
@@ -31,9 +40,18 @@ public class UserUtil {
 		}
 	}
 
+	/**
+	 * extract second email from friend list in request entity
+	 * 
+	 * @param request
+	 * @return
+	 */
 	public static String getSecondEmail(ConnectionRequestEntity request) {
-		if (Objects.isNull(request) || CollectionUtils.isEmpty(request.getFriends())) {
+		if (Objects.isNull(request)) {
 			throw new FriendServiceException(ErrorType.NULL_REQUEST_ENTITY);
+		}
+		if (CollectionUtils.isEmpty(request.getFriends())) {
+			throw new FriendServiceException(ErrorType.EMPTY_FRIEND_PARAM);
 		}
 		try {
 			return request.getFriends().get(1);
@@ -42,6 +60,12 @@ public class UserUtil {
 		}
 	}
 
+	/**
+	 * convert {@link ConnectionRequestEntity} friends to list of {@link UserDto}
+	 * 
+	 * @param request
+	 * @return
+	 */
 	public static List<UserDto> convertConnectionEntityToUserDtoList(ConnectionRequestEntity request) {
 		RequestValidationUtil.validateConnectionRequest(request);
 		List<UserDto> userDtoList = new ArrayList<>();
@@ -52,6 +76,12 @@ public class UserUtil {
 		return userDtoList;
 	}
 
+	/**
+	 * Convert List of {@link UserRelationDto} to List of Related Id
+	 * 
+	 * @param userRelationList
+	 * @return
+	 */
 	public static List<String> convertUserRelationListToRelatedIdList(List<UserRelationDto> userRelationList) {
 		if (CollectionUtils.isEmpty(userRelationList)) {
 			return Lists.newArrayList();

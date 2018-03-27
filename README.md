@@ -8,7 +8,7 @@ Accessing the public cloud directly without installing in local.
 
 App: https://mysterious-springs-34492.herokuapp.com/friend-management/
 
-Swagger-UI: https://mysterious-springs-34492.herokuapp.com/friend-management/swagger-ui.html/
+Swagger-UI: https://mysterious-springs-34492.herokuapp.com/friend-management/swagger-ui.html#/
 
 to test the application, you can use the swagger-ui or use [Postman].
 
@@ -32,7 +32,7 @@ Wait until both database and app is up and running
 
 the application can be accessed in http://localhost:8090/friend-management/
 
-Swagger-UI: http://localhost:8090/friend-management/swagger-ui.html
+Swagger-UI: http://localhost:8090/friend-management/swagger-ui.html#/
 
 to test the application, you can use the swagger-ui or use [Postman].
 
@@ -302,7 +302,7 @@ Eligibility for receiving updates from i.e. "john@example.com":
 
 ## Documentation
 The documentation of the application is this readme file. 
-You can also access the api documentation using swagger UI in http://localhost:8090/friend-management/swagger-ui.html
+You can also access the api documentation using swagger UI in http://localhost:8090/friend-management/swagger-ui.html#/
 
 [//]: # 
 [Java]: <https://swagger.io/>
