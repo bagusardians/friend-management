@@ -15,6 +15,12 @@ public class EmailUtil {
 
 	private static final String EMAIL_PATTERN = "^[a-z0-9._-]+@[a-z0-9-]+(?:\\.[a-z0-9-]+)*$";
 
+	/**
+	 * validate emails based on email_pattern
+	 * 
+	 * @param emails
+	 * @return
+	 */
 	public static boolean isEmailsValid(String... emails) {
 		for (String email : emails) {
 			if (StringUtils.isEmpty(email)) {
@@ -27,6 +33,12 @@ public class EmailUtil {
 		return true;
 	}
 
+	/**
+	 * extracting emails in the string
+	 * 
+	 * @param text
+	 * @return
+	 */
 	public static List<String> extractEmailFromText(String text) {
 		if (StringUtils.isEmpty(text)) {
 			return new ArrayList<>();

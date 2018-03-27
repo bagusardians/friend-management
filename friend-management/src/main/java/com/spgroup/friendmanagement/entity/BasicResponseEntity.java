@@ -8,7 +8,7 @@ import lombok.Data;
 @Api(value = "Basic Response")
 public class BasicResponseEntity {
 
-	@ApiModelProperty(value = "Is operation success")
+	@ApiModelProperty(value = "Is operation success", example = "true")
 	boolean success;
 
 	public BasicResponseEntity() {
