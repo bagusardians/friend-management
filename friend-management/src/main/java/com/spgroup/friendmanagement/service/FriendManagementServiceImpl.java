@@ -47,6 +47,16 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		UserDto firstUser = userDao.addUser(new UserDto(UserUtil.getFirstEmail(entity)));
 		UserDto secondUser = userDao.addUser(new UserDto(UserUtil.getSecondEmail(entity)));
 
+		UserRelationDto userRelationFirst = userRelationDao.fetchCorrelationBetweenTwoUser(firstUser.getId(),
+				secondUser.getId());
+		UserRelationDto userRelationSecond = userRelationDao.fetchCorrelationBetweenTwoUser(secondUser.getId(),
+				firstUser.getId());
+
+		if (isBlocked(userRelationFirst, userRelationSecond)) {
+			log.info("unable to add friend");
+			throw new FriendServiceException(ErrorType.BLOCKED);
+		}
+
 		UserRelationKey relationFirstKey = new UserRelationKey(firstUser.getId(), secondUser.getId());
 		userRelationDao.addUserRelation(new UserRelationDto(relationFirstKey, RelationTypeEnum.FRIEND, false));
 		UserRelationKey relationSecondKey = new UserRelationKey(secondUser.getId(), firstUser.getId());
@@ -54,6 +64,11 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 
 		log.info("successfully create a friend connection");
 		return BasicResponseEntity.createSuccessResponse();
+	}
+
+	private boolean isBlocked(UserRelationDto userRelationFirst, UserRelationDto userRelationSecond) {
+		return ((!Objects.isNull(userRelationFirst) && userRelationFirst.isBlock())
+				|| (!Objects.isNull(userRelationSecond) && userRelationSecond.isBlock()));
 	}
 
 	@Override
@@ -175,7 +190,8 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 		UserRelationDto userRelation = userRelationDao.fetchCorrelationBetweenTwoUser(requestor.getId(),
 				target.getId());
 		if (Objects.isNull(userRelation)) {
-			throw new FriendServiceException(ErrorType.NO_RELATION);
+			UserRelationKey relationKey = new UserRelationKey(requestor.getId(), target.getId());
+			userRelation = new UserRelationDto(relationKey, RelationTypeEnum.BLOCK, true);
 		}
 
 		userRelation.setBlock(true);
