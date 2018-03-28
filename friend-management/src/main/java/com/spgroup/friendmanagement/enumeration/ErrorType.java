@@ -20,8 +20,8 @@ public enum ErrorType {
 	USER_NOT_FOUND("Cannot find the specified user", "Invalid input(s)", "422E009",HttpStatus.UNPROCESSABLE_ENTITY),
 	REQUESTOR_NOT_FOUND("Cannot find the specified requestor", "Invalid input(s)", "422E010",HttpStatus.UNPROCESSABLE_ENTITY),
 	TARGET_NOT_FOUND("Cannot find the specified target", "Invalid input(s)", "422E011",HttpStatus.UNPROCESSABLE_ENTITY),
-	NO_RELATION("No relation between user and target", "Invalid input(s)", "422E012",HttpStatus.UNPROCESSABLE_ENTITY),
-	SENDER_NOT_FOUND("Cannot find the specified target", "Invalid input(s)", "422E012",HttpStatus.UNPROCESSABLE_ENTITY),
+	BLOCKED("Users are in block relation", "Unable to make connections.", "422E012",HttpStatus.UNPROCESSABLE_ENTITY),
+	SENDER_NOT_FOUND("Cannot find the specified sender", "Invalid input(s)", "422E013",HttpStatus.UNPROCESSABLE_ENTITY),
 	ERROR_FIRST_EMAIL("Error in extracting first email", "Oops.. Something unexpected happen.", "500E002",HttpStatus.INTERNAL_SERVER_ERROR),
 	ERROR_SECOND_EMAIL("Error in extracting second email", "Oops.. Something unexpected happen.",  "500E003",HttpStatus.INTERNAL_SERVER_ERROR);
 
