@@ -48,7 +48,8 @@ the postman api collection can be found the main folder with the name: **Friend 
   - Return success if the process is successful.
 
 #### assumption
- - App will return success, even though the email provided is already a friend
+ - App will return success, even though the email provided is already a friend, unless blocked
+ - if the of the inputted user block the other, it will throw error that the user is in block relation
  - only two email address that can be inputted at a time
 #### input
 ```
@@ -198,6 +199,7 @@ the postman api collection can be found the main folder with the name: **Friend 
 
 #### assumption
  - App will return success, even though the email provided is already blocking updates 
+ - if the user not in relation, they cannot make a new friend connection if blocked
 #### input
 ```
 {
