@@ -19,6 +19,8 @@ the postman api collection can be found the main folder with the name: **Friend 
 
 ### Local
 Build the spring boot app, by going to its folder in friend-management
+
+*this gradle build is optional, since the latest jar is already provided in /deploy folder*
 ```sh
 $ cd friend-management
 $ ./gradlew build
@@ -285,8 +287,8 @@ Eligibility for receiving updates from i.e. "john@example.com":
 | 422E009 | USER_NOT_FOUND | Unprocessable Entity (422) | Cannot find the specified user |
 | 422E010 | REQUESTOR_NOT_FOUND | Unprocessable Entity (422) | Cannot find the specified requestor |
 | 422E011 | TARGET_NOT_FOUND | Unprocessable Entity (422) | Cannot find the specified target |
-| 422E012 | NO_RELATION | Unprocessable Entity (422) | No relation between user and target |
-| 422E012 | SENDER_NOT_FOUND | Unprocessable Entity (422) | Cannot find the specified sender |
+| 422E012 | BLOCKED | Unprocessable Entity (422) | Inputted Users are in block relation |
+| 422E013 | SENDER_NOT_FOUND | Unprocessable Entity (422) | Cannot find the specified sender |
 | 500E001 | INTERNAL_SERVER_ERROR | Internal Server Error (500) | Please check the log for the detail |
 | 500E002 | ERROR_FIRST_EMAIL | Internal Server Error (500) | Error in extracting first email |
 | 500E003 | ERROR_SECOND_EMAIL | Internal Server Error (500) | Error in extracting second email |
